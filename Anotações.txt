@@ -1,0 +1,67 @@
+sobre as músicas e
+vídeos tais como os autores, álbuns, grupos musicais, compositores, letras, concertos
+
+um utilizador obtém a listagem de músicas, e
+vídeos com as respetivas informações, críticas escritas por outros utilizadores, bem como informações
+gerais sobre os géneros, formato, tamanho e a data de lançamento
+
+Apenas os editores (no caso, quem
+partilhou pela primeira vez o conteúdo) podem acrescentar e alterar informações sobre os conteúdos
+(álbuns e músicas, grupos, vídeos, etc.), sendo que os restantes utilizadores podem apenas consultar
+essas informações.
+
+É possível a cada utilizador transferir (download) ficheiros (MP3, FLAC, MP4, WMV
+e outros tipos de compreensão estudada que acharem conveniente) que ficarão associados à sua
+própria conta, mas que poderão ser visualizados, manipulados e partilhados com outros utilizadores.
+
+Qualquer utilizador (editor ou não) pode escrever uma crítica a um álbum, que consiste
+numa pontuação e numa justificação textual (opcional).
+
+Cada utilizador pode também criar
+playlists compostas por músicas que selecione. As playlists podem ser privadas ou públicas
+
+os requisitos de criação de
+grupos de amigos e pedido de adição a grupos de amigos já existentes. Os grupos têm
+owners, que confirmam ou recusam a pertença ao grupo após pedido. O owner inicial é o
+utilizador que criou o grupo, sendo que ele pode adicionar mais owners.
+O objetivo dos grupos é permitir partilha limitada ao grupo. Quando nova informação é
+adicionada por um utilizador, este pode indicar se a partilha é publica ou restringida a um ou
+mais dos grupos a que pertence. Isto significa também que existe um grupo de nome Público
+por defeito, o qual partilha com todos os utilizadores registados. Existe um owner inicial do
+grupo Público (Administrador), que pode adicionar outros owners.
+
+Quer no grupo Público, quer em qualquer outro grupo, existe também o papel de editor (um
+owner é editor por defeito, mas um editor pode não ser owner). Apenas os editores podem
+acrescentar e alterar informações sobre álbuns e músicas, sendo que os restantes utilizadores
+podem apenas consultar essas informações. Fica sempre registado quem colocou informação.
+
+Sempre que adiciona informação/partilhas, um utilizador especifica também para que grupos partilha.
+Para permitir que o utilizador não tenha de indicar sempre os grupos a quem partilha, um utilizador tem
+também uma lista de grupos a quem partilha por omissão. Inicialmente essa lista tem o grupo Público,
+mas pode ser alterada para grupos que deseje.
+
+No entanto, as funcionalidades obrigatórias
+são:
+1. Transferir média (download) para uma base de dados local;
+2. Carregar média (upload) no servidor
+3. Reproduzir média simples (apenas áudio) ou combinados (vídeos e textos). A
+reprodução pode ser feita localmente ou na via streaming.
+4. Durante a reprodução, o utilizador pode avançar para uma posição pretendida,
+pausar e parar.
+5. Comprimir e descomprimir mídias;
+6. Navegação segura;
+7. Distribuição online (web) e off-line (desktop ou mobile)
+8. Radio contendo no mínimo 30 estações agrupadas por países.
+
+O sistema deverá permitir a criação, visualização, edição e eliminação de Categorias. Para cada uma
+dessas categorias deverá ser possível criar (com um título ou nome e uma descrição) e os respectivos
+identificadores, que vão estar sempre associados a uma determinado Categorias.
+Na gestão dos Utilizadores, o sistema deverá permitir a criação, edição e remoção de utilizadores. A
+data de inscrição desse utilizador no sistema não deverá aparecer na listagem, aparecendo apenas o
+
+
+É necessário criar no mínimo 3
+tipos de utilizadores, o administrador do sistema, o gestor de conteúdo e utilizador comum
+
+
+

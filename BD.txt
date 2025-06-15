@@ -1,0 +1,101 @@
+utilizador:
+int id
+string nomeDeUtilizador
+string email
+string senha
+int tipo (1:admin, 2:user)
+
+grupo:
+string nome
+int id
+
+membrosGrupo
+int idGrupo
+int idMembro
+int funcao (1:membro,2:editor,3:owner)
+
+categoria:
+int id
+string nome
+string descricao
+
+artista
+
+id: int
+nome: string
+biografia: string
+dataInicio: date
+dataFim: date (opcional)
+
+album:
+
+id: int
+titulo: string
+descricao: string
+idArtista: int
+dataLancamento: date
+
+musica
+
+id: int
+titulo: string
+duracao: time
+formato: string (ex: MP3, FLAC)
+tamanho: int
+idAlbum: int
+compositor: string
+letra: string
+dataLancamento: date
+caminhoFicheiro: string
+idCategoria: int
+idUploader: int
+
+video
+
+id: int
+titulo: string
+descricao: string
+duracao: time
+formato: string (ex: MP4, WMV)
+tamanho: int
+caminhoFicheiro: string
+idCategoria: int
+idUploader: int
+dataLancamento: date
+
+Crítica
+
+id: int
+idUtilizador: int
+idAlbum: int
+pontuacao: int (1 a 5)
+comentario: string (máx 300 caracteres)
+dataCritica: datetime
+
+Playlist
+id: int
+titulo: string
+privada: boolean
+idUtilizador: int
+
+PlaylistMusica
+idPlaylist: int
+idMusica: int
+ordem: int
+
+Partilha
+
+id: int
+idFicheiro: int
+tipoFicheiro: string (musica ou video)
+idPartilhadoCom: int (grupo ou utilizador)
+tipoDestino: string (grupo ou utilizador)
+dataPartilha: datetime
+
+RádioEstacao
+id: int
+nome: string
+urlStream: string
+pais: string
+genero: string
+
