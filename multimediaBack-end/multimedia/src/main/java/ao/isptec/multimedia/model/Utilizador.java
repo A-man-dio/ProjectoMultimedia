@@ -1,16 +1,21 @@
 package ao.isptec.multimedia.model;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
+import jakarta.persistence.*;
 
 @Entity
 public class Utilizador {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false) // iiiiiiiiii
+    private String nome;
+
     @Column(nullable = false, unique = true)
-    private String nomeDeUtilizador;
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -19,7 +24,12 @@ public class Utilizador {
     private String senha;
 
     @Column(nullable = false)
-    private Integer tipo; // 1=admin, 2=user
+    private Integer tipo; // 1=normal , 2==administrador
+
+    private LocalDateTime dataRegisto;
+
+    @Column(nullable = false)
+    private Integer ativo; // 1-ativo , 0-desativo
 
     public Integer getId() {
         return id;
@@ -29,12 +39,12 @@ public class Utilizador {
         this.id = id;
     }
 
-    public String getNomeDeUtilizador() {
-        return nomeDeUtilizador;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeDeUtilizador(String nomeDeUtilizador) {
-        this.nomeDeUtilizador = nomeDeUtilizador;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
@@ -60,4 +70,31 @@ public class Utilizador {
     public void setTipo(Integer tipo) {
         this.tipo = tipo;
     }
+
+    public LocalDateTime getDataRegisto() {
+        return dataRegisto;
+    }
+
+    public void setDataRegisto(LocalDateTime dataRegisto) {
+        this.dataRegisto = dataRegisto;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Integer getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Integer ativo) {
+        this.ativo = ativo;
+    }
+
+
+    
 }

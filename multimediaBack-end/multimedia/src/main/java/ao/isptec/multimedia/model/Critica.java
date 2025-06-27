@@ -1,16 +1,20 @@
 package ao.isptec.multimedia.model;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 
 @Entity
 public class Critica {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    private Integer pontuacao;
+    private String comentario;
+    private LocalDateTime dataCritica;
+
     @ManyToOne
     @JoinColumn(name = "idUtilizador", nullable = false)
     private Utilizador utilizador;
@@ -18,9 +22,7 @@ public class Critica {
     @ManyToOne
     @JoinColumn(name = "idAlbum", nullable = false)
     private Album album;
-    private Integer pontuacao;
-    private String comentario;
-    private java.time.LocalDateTime dataCritica;
+    
 
     public Integer getId() {
         return id;

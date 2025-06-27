@@ -2,43 +2,52 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.Categoria;
 import ao.isptec.multimedia.service.CategoriaService;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categorias")
+@RequestMapping("/Categoria")
 public class CategoriaController {
 
-    private final CategoriaService service;
+    @Autowired
+    private CategoriaService categoriaService;
 
-    public CategoriaController(CategoriaService service) {
-        this.service = service;
+    @GetMapping("/getAll")
+    public List<Categoria> getAllCategorias() {
+        return categoriaService.getAllCategorias();
     }
 
-    @GetMapping
-    public List<Categoria> listar() {
-        return service.listarTodas();
+    @GetMapping("/getCategoriaByNome")
+    public ResponseEntity<Categoria> getCategoriaByNome(@RequestParam String nome) {
+        Categoria categoria = categoriaService.findByNome(nome);
+        if (categoria == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(categoria);
     }
 
-    @GetMapping("/{id}")
-    public Categoria buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @PostMapping("/save")
+    public Categoria saveCategoria(@RequestBody Categoria categoria) {
+        return categoriaService.save(categoria);
     }
 
-    @PostMapping
-    public Categoria criar(@RequestBody Categoria c) {
-        return service.criar(c);
+    @DeleteMapping("/delete")
+    public void deleteCategoria(@RequestBody Categoria categoria) {
+        categoriaService.delete(categoria);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/getCategoriasByNomeContendo")
+    public List<Categoria> getCategoriasByNomeContendo(@RequestParam String nome) {
+        return categoriaService.findByNomeContainingIgnoreCase(nome);
     }
-    /*
-{
-  "nome": "Hip Hop",
-  "descricao": "Estilo musical urbano"
-}
-    */
+
+    @GetMapping("/getCategoriaById")
+    public Categoria getCategoriaById(@RequestParam Integer id) {
+        return categoriaService.findById(id);
+    }
+
 }

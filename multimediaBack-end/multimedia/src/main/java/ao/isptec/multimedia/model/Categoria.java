@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 @Entity
 
 public class Categoria {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false, unique = true)
     private String nome;
+    
     private String descricao;
 
     public Integer getId() {

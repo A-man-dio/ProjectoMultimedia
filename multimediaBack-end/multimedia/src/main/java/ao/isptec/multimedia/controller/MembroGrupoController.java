@@ -1,42 +1,58 @@
 package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.MembroGrupo;
-import ao.isptec.multimedia.model.MembroGrupoId;
 import ao.isptec.multimedia.service.MembroGrupoService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/membros-grupo")
+@RequestMapping("/MembroGrupo")
 public class MembroGrupoController {
 
-    private final MembroGrupoService service;
+    @Autowired
+    private MembroGrupoService membroGrupoService;
 
-    public MembroGrupoController(MembroGrupoService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public MembroGrupo saveMembroGrupo(@RequestBody MembroGrupo membroGrupo) {
+        return membroGrupoService.save(membroGrupo);
     }
 
-    @GetMapping
-    public List<MembroGrupo> listar() {
-        return service.listarTodos();
+    @DeleteMapping("/delete")
+    public void deleteMembroGrupo(@RequestBody MembroGrupo membroGrupo) {
+        membroGrupoService.delete(membroGrupo);
     }
 
-    @PostMapping
-    public MembroGrupo criar(@RequestBody MembroGrupo m) {
-        return service.criar(m);
+    @GetMapping("/getAll")
+    public List<MembroGrupo> getAllMembrosGrupo() {
+        return membroGrupoService.getAllMembrosGrupo();
     }
 
-    @DeleteMapping("/{idGrupo}/{idMembro}")
-    public void remover(@PathVariable Integer idGrupo, @PathVariable Integer idMembro) {
-        service.deletar(new MembroGrupoId(idGrupo, idMembro));
+    @GetMapping("/getMembrosGrupoByUtilizadorId")
+    public List<MembroGrupo> getMembrosGrupoByUtilizadorId(@RequestParam Integer idUtilizador) {
+        return membroGrupoService.findByUtilizadorId(idUtilizador);
     }
 
-    /*
-{
-  "idGrupo": 1,
-  "idMembro": 2,
-  "funcao": 3
-}
-*/
+    @GetMapping("/getMembrosGrupoByGrupoId")
+    public List<MembroGrupo> getMembrosGrupoByGrupoId(@RequestParam Integer idGrupo) {
+        return membroGrupoService.findByGrupoId(idGrupo);
+    }
+
+    @GetMapping("/getMembrosGrupoByPapel")
+    public List<MembroGrupo> getMembrosGrupoByPapel(@RequestParam Integer papel) {
+        return membroGrupoService.findByPapel(papel);
+    }
+
+    @GetMapping("/getMembrosGrupoByEstado")
+    public List<MembroGrupo> getMembrosGrupoByEstado(@RequestParam Integer estado) {
+        return membroGrupoService.findByEstado(estado);
+    }
+
+    @GetMapping("/getMembroGrupoById")
+    public MembroGrupo getMembroGrupoById(@RequestParam Integer id) {
+        return membroGrupoService.findById(id);
+    }
+
 }

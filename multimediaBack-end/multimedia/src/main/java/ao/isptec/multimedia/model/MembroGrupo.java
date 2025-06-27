@@ -3,37 +3,60 @@ package ao.isptec.multimedia.model;
 import jakarta.persistence.*;
 
 @Entity
-@IdClass(MembroGrupoId.class)
 public class MembroGrupo {
-    @Id
-    private Integer idGrupo;
 
     @Id
-    private Integer idMembro;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private Integer papel; // 1=membro, 2=editor, 3=owner
+    private Integer estado; // 0-recusado , 1-aprovado , 2-pendente
 
-    private Integer funcao; // 1=membro, 2=editor, 3=owner
+    @ManyToOne
+    @JoinColumn(name = "idGrupo", nullable = false)
+    private Grupo grupo;
 
-    public Integer getIdMembro() {
-        return idMembro;
+    @ManyToOne
+    @JoinColumn(name = "idUtilizador", nullable = false)
+    private Utilizador utilizador;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdMembro(Integer idMembro) {
-        this.idMembro = idMembro;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Integer getIdGrupo() {
-        return idGrupo;
+    public Integer getPapel() {
+        return papel;
     }
 
-    public void setIdGrupo(Integer idGrupo) {
-        this.idGrupo = idGrupo;
+    public void setPapel(Integer papel) {
+        this.papel = papel;
     }
 
-    public Integer getFuncao() {
-        return funcao;
+    public Integer getEstado() {
+        return estado;
     }
 
-    public void setFuncao(Integer funcao) {
-        this.funcao = funcao;
+    public void setEstado(Integer estado) {
+        this.estado = estado;
     }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public Utilizador getUtilizador() {
+        return utilizador;
+    }
+
+    public void setUtilizador(Utilizador utilizador) {
+        this.utilizador = utilizador;
+    }
+
 }

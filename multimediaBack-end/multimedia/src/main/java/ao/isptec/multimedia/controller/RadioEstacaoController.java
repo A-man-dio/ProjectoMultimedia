@@ -2,46 +2,42 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.RadioEstacao;
 import ao.isptec.multimedia.service.RadioEstacaoService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/radio")
+@RequestMapping("/RadioEstacao")
 public class RadioEstacaoController {
 
-    private final RadioEstacaoService service;
+    @Autowired
+    private RadioEstacaoService radioEstacaoService;
 
-    public RadioEstacaoController(RadioEstacaoService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public RadioEstacao saveRadioEstacao(@RequestBody RadioEstacao radioEstacao) {
+        return radioEstacaoService.save(radioEstacao);
     }
 
-    @GetMapping
-    public List<RadioEstacao> listar() {
-        return service.listarTodas();
+    @DeleteMapping("/delete")
+    public void deleteRadioEstacao(@RequestBody RadioEstacao radioEstacao) {
+        radioEstacaoService.delete(radioEstacao);
     }
 
-    @GetMapping("/{id}")
-    public RadioEstacao buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @GetMapping("/getAll")
+    public List<RadioEstacao> getAllRadioEstacoes() {
+        return radioEstacaoService.getAllRadioEstacoes();
     }
 
-    @PostMapping
-    public RadioEstacao criar(@RequestBody RadioEstacao r) {
-        return service.criar(r);
+    @GetMapping("/getRadioEstacoesByNomeContendo")
+    public List<RadioEstacao> getRadioEstacoesByNomeContendo(@RequestParam String nome) {
+        return radioEstacaoService.findByNomeContainingIgnoreCase(nome);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/getRadioEstacaoById")
+    public RadioEstacao getRadioEstacaoById(@RequestParam Integer id) {
+        return radioEstacaoService.findById(id);
     }
-    /*
-{
-  "nome": "Rádio Angola",
-  "urlStream": "http://stream.radioangola.ao/live",
-  "pais": "Angola",
-  "genero": "Notícias"
-}
-*/
 
 }

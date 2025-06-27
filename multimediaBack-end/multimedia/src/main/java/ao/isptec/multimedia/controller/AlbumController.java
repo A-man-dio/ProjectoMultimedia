@@ -2,46 +2,42 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.Album;
 import ao.isptec.multimedia.service.AlbumService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/albuns")
+@RequestMapping("/Album")
 public class AlbumController {
 
-    private final AlbumService service;
+    @Autowired
+    private AlbumService albumService;
 
-    public AlbumController(AlbumService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public Album saveAlbum(@RequestBody Album album) {
+        return albumService.save(album);
     }
 
-    @GetMapping
-    public List<Album> listar() {
-        return service.listarTodos();
+    @DeleteMapping("/delete")
+    public void deleteAlbum(@RequestBody Album album) {
+        albumService.delete(album);
     }
 
-    @GetMapping("/{id}")
-    public Album buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @GetMapping("/getAll")
+    public List<Album> getAllAlbuns() {
+        return albumService.getAllAlbuns();
     }
 
-    @PostMapping
-    public Album criar(@RequestBody Album album) {
-        return service.criar(album);
+    @GetMapping("/getAlbunsByTituloContendo")
+    public List<Album> getAlbunsByTituloContendo(@RequestParam String titulo) {
+        return albumService.findByTituloContainingIgnoreCase(titulo);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/getAlbumById")
+    public Album getAlbumById(@RequestParam Integer id) {
+        return albumService.findById(id);
     }
 
-    /*
-{
-  "titulo": "Meu Primeiro Álbum",
-  "descricao": "Álbum de estreia do artista",
-  "idArtista": 1,
-  "dataLancamento": "2023-01-15"
-}
-    */
 }

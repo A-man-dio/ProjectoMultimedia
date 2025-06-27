@@ -1,19 +1,18 @@
 package ao.isptec.multimedia.model;
-import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
 @Entity
 
 public class Artista {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nome;
     private String biografia;
-    private java.time.LocalDate dataInicio;
-    private java.time.LocalDate dataFim;
+    private String caminhoFoto;
 
     public Integer getId() {
         return id;
@@ -39,19 +38,12 @@ public class Artista {
         this.biografia = biografia;
     }
 
-    public LocalDate getDataInicio() {
-        return dataInicio;
+    public String getCaminhoFoto() {
+        return caminhoFoto;
     }
 
-    public void setDataInicio(LocalDate dataInicio) {
-        this.dataInicio = dataInicio;
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
     }
 
-    public LocalDate getDataFim() {
-        return dataFim;
-    }
-
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
-    }
 }

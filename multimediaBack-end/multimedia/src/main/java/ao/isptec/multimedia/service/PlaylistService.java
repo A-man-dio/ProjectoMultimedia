@@ -2,32 +2,42 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Playlist;
 import ao.isptec.multimedia.repository.PlaylistRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlaylistService {
-    private final PlaylistRepository repo;
+    @Autowired
+    private PlaylistRepository repository;
 
-    public PlaylistService(PlaylistRepository repo) {
-        this.repo = repo;
+    public Playlist save(Playlist playlist) {
+        return repository.save(playlist);
     }
 
-    public List<Playlist> listarTodas() {
-        return repo.findAll();
+    public void delete(Playlist playlist) {
+        repository.delete(playlist);
     }
 
-    public Optional<Playlist> buscarPorId(Integer id) {
-        return repo.findById(id);
+    public List<Playlist> getAllPlaylists() {
+        return repository.findAll();
     }
 
-    public Playlist criar(Playlist playlist) {
-        return repo.save(playlist);
+    public List<Playlist> findByTituloContainingIgnoreCase(String titulo) {
+        return repository.findByTituloContainingIgnoreCase(titulo);
     }
 
-    public void deletar(Integer id) {
-        repo.deleteById(id);
+    public List<Playlist> findByUtilizadorId(Integer idUtilizador) {
+        return repository.findByUtilizadorId(idUtilizador);
+    }
+
+    public List<Playlist> findByPrivada(Boolean privada) {
+        return repository.findByPrivada(privada);
+    }
+
+    public Playlist findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 }

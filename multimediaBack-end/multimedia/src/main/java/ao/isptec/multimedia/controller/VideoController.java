@@ -2,53 +2,52 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.Video;
 import ao.isptec.multimedia.service.VideoService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/videos")
+@RequestMapping("/Video")
 public class VideoController {
 
-    private final VideoService service;
+    @Autowired
+    private VideoService videoService;
 
-    public VideoController(VideoService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public Video saveVideo(@RequestBody Video video) {
+        return videoService.save(video);
     }
 
-    @GetMapping
-    public List<Video> listar() {
-        return service.listarTodos();
+    @DeleteMapping("/delete")
+    public void deleteVideo(@RequestBody Video video) {
+        videoService.delete(video);
     }
 
-    @GetMapping("/{id}")
-    public Video buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @GetMapping("/getAll")
+    public List<Video> getAllVideos() {
+        return videoService.getAllVideos();
     }
 
-    @PostMapping
-    public Video criar(@RequestBody Video video) {
-        return service.criar(video);
+    @GetMapping("/getVideosByTituloContendo")
+    public List<Video> getVideosByTituloContendo(@RequestParam String titulo) {
+        return videoService.findByTituloContainingIgnoreCase(titulo);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/getVideosByCategoriaId")
+    public List<Video> getVideosByCategoriaId(@RequestParam Integer idCategoria) {
+        return videoService.findByCategoriaId(idCategoria);
     }
 
-    /*
-    * {
-  "titulo": "Apresentação",
-  "descricao": "Vídeo institucional",
-  "duracao": "00:05:00",
-  "formato": "MP4",
-  "tamanho": 12000,
-  "caminhoFicheiro": "/videos/institucional.mp4",
+    @GetMapping("/getVideosByMusicaId")
+    public List<Video> getVideosByMusicaId(@RequestParam Integer idMusica) {
+        return videoService.findByMusicaId(idMusica);
+    }
 
-  "categoria": { "id": 2 },
-  "uploader": { "id": 1 }
-  "dataLancamento": "2024-10-01"
-}
-*/
+    @GetMapping("/getVideoById")
+    public Video getVideoById(@RequestParam Integer id) {
+        return videoService.findById(id);
+    }
 
 }

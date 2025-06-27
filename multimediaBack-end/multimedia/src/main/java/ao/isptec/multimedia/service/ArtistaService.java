@@ -2,33 +2,36 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Artista;
 import ao.isptec.multimedia.repository.ArtistaRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ArtistaService {
 
-    private final ArtistaRepository repo;
+    @Autowired
+    private ArtistaRepository repository;
 
-    public ArtistaService(ArtistaRepository repo) {
-        this.repo = repo;
+    public Artista save(Artista artista) {
+        return repository.save(artista);
     }
 
-    public List<Artista> listarTodos() {
-        return repo.findAll();
+    public void delete(Artista artista) {
+        repository.delete(artista);
     }
 
-    public Optional<Artista> buscarPorId(Integer id) {
-        return repo.findById(id);
+    public List<Artista> getAllArtistas() {
+        return repository.findAll();
     }
 
-    public Artista criar(Artista artista) {
-        return repo.save(artista);
+    public List<Artista> findByNomeContainingIgnoreCase(String nome) {
+        return repository.findByNomeContainingIgnoreCase(nome);
     }
 
-    public void deletar(Integer id) {
-        repo.deleteById(id);
+    public Artista findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
+
 }

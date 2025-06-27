@@ -1,34 +1,47 @@
 package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.PlaylistMusica;
-import ao.isptec.multimedia.model.PlaylistMusicaId;
 import ao.isptec.multimedia.service.PlaylistMusicaService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/playlist-musicas")
+@RequestMapping("/PlaylistMusica")
 public class PlaylistMusicaController {
 
-    private final PlaylistMusicaService service;
+    @Autowired
+    private PlaylistMusicaService playlistMusicaService;
 
-    public PlaylistMusicaController(PlaylistMusicaService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public PlaylistMusica savePlaylistMusica(@RequestBody PlaylistMusica playlistMusica) {
+        return playlistMusicaService.save(playlistMusica);
     }
 
-    @GetMapping
-    public List<PlaylistMusica> listar() {
-        return service.listarTodas();
+    @DeleteMapping("/delete")
+    public void deletePlaylistMusica(@RequestBody PlaylistMusica playlistMusica) {
+        playlistMusicaService.delete(playlistMusica);
     }
 
-    @PostMapping
-    public PlaylistMusica criar(@RequestBody PlaylistMusica musica) {
-        return service.criar(musica);
+    @GetMapping("/getAll")
+    public List<PlaylistMusica> getAllPlaylistMusicas() {
+        return playlistMusicaService.getAllPlaylistMusicas();
     }
 
-    @DeleteMapping("/{idPlaylist}/{idMusica}")
-    public void remover(@PathVariable Integer idPlaylist, @PathVariable Integer idMusica) {
-        service.deletar(new PlaylistMusicaId(idPlaylist, idMusica));
+    @GetMapping("/getPlaylistMusicasByPlaylistId")
+    public List<PlaylistMusica> getPlaylistMusicasByPlaylistId(@RequestParam Integer idPlaylist) {
+        return playlistMusicaService.findByPlaylistId(idPlaylist);
+    }
+
+    @GetMapping("/getPlaylistMusicasByMusicaId")
+    public List<PlaylistMusica> getPlaylistMusicasByMusicaId(@RequestParam Integer idMusica) {
+        return playlistMusicaService.findByMusicaId(idMusica);
+    }
+
+    @GetMapping("/getPlaylistMusicaById")
+    public PlaylistMusica getPlaylistMusicaById(@RequestParam Integer id) {
+        return playlistMusicaService.findById(id);
     }
 }

@@ -2,33 +2,36 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Album;
 import ao.isptec.multimedia.repository.AlbumRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AlbumService {
 
-    private final AlbumRepository repo;
+    @Autowired
+    private AlbumRepository repository;
 
-    public AlbumService(AlbumRepository repo) {
-        this.repo = repo;
+    public Album save(Album album) {
+        return repository.save(album);
     }
 
-    public List<Album> listarTodos() {
-        return repo.findAll();
+    public void delete(Album album) {
+        repository.delete(album);
     }
 
-    public Optional<Album> buscarPorId(Integer id) {
-        return repo.findById(id);
+    public List<Album> getAllAlbuns() {
+        return repository.findAll();
     }
 
-    public Album criar(Album album) {
-        return repo.save(album);
+    public List<Album> findByTituloContainingIgnoreCase(String titulo) {
+        return repository.findByTituloContainingIgnoreCase(titulo);
     }
 
-    public void deletar(Integer id) {
-        repo.deleteById(id);
+    
+    public Album findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 }

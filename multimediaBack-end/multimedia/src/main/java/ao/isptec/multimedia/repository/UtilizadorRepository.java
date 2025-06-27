@@ -1,8 +1,15 @@
 package ao.isptec.multimedia.repository;
 
 import ao.isptec.multimedia.model.Utilizador;
+
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UtilizadorRepository extends JpaRepository<Utilizador, Integer> {
-    boolean existsByEmail(String email);
+    public Utilizador findByUsername(String username);
+
+    public Utilizador findByEmail(String email);
+
+    Optional<Utilizador> findById(Integer id);
 }

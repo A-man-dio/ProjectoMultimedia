@@ -13,22 +13,21 @@ public class Musica {
     private Integer id;
 
     private String titulo;
-    private java.time.LocalTime duracao;
+    private LocalTime duracao;
     private String formato;
-    private Integer tamanho;
-    @ManyToOne
-    @JoinColumn(name = "idAlbum", nullable = false)
-    private Album album;
-    private String compositor;
+    private Integer tamanho; // MB
     private String letra;
-    private java.time.LocalDate dataLancamento;
+    private LocalDate dataLancamento;
     private String caminhoFicheiro;
+    private String caminhoFoto;
+
+    @ManyToOne
+    @JoinColumn(name = "idAlbum")
+    private Album album;
+
     @ManyToOne
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
-    @ManyToOne
-    @JoinColumn(name = "idUploader", nullable = false)
-    private Utilizador uploader;
 
     public Integer getId() {
         return id;
@@ -78,14 +77,6 @@ public class Musica {
         this.album = album;
     }
 
-    public String getCompositor() {
-        return compositor;
-    }
-
-    public void setCompositor(String compositor) {
-        this.compositor = compositor;
-    }
-
     public String getLetra() {
         return letra;
     }
@@ -118,11 +109,13 @@ public class Musica {
         this.categoria = categoria;
     }
 
-    public Utilizador getUploader() {
-        return uploader;
+
+    public String getCaminhoFoto() {
+        return caminhoFoto;
     }
 
-    public void setUploader(Utilizador uploader) {
-        this.uploader = uploader;
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
     }
+
 }

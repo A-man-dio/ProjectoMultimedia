@@ -2,44 +2,47 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.Grupo;
 import ao.isptec.multimedia.service.GrupoService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/grupos")
+@RequestMapping("/Grupo")
 public class GrupoController {
 
-    private final GrupoService service;
+    @Autowired
+    private GrupoService grupoService;
 
-    public GrupoController(GrupoService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public Grupo saveGrupo(@RequestBody Grupo grupo) {
+        return grupoService.save(grupo);
     }
 
-    @GetMapping
-    public List<Grupo> listar() {
-        return service.listarTodos();
+    @DeleteMapping("/delete")
+    public void deleteGrupo(@RequestBody Grupo grupo) {
+        grupoService.delete(grupo);
     }
 
-    @GetMapping("/{id}")
-    public Grupo buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @GetMapping("/getAll")
+    public List<Grupo> getAllGrupos() {
+        return grupoService.getAllGrupos();
     }
 
-    @PostMapping
-    public Grupo criar(@RequestBody Grupo g) {
-        return service.criar(g);
+    @GetMapping("/getGruposByNomeContendo")
+    public List<Grupo> getGruposByNomeContendo(@RequestParam String nome) {
+        return grupoService.findByNomeContainingIgnoreCase(nome);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/getGruposByUtilizadorId")
+    public List<Grupo> getGruposByUtilizadorId(@RequestParam Integer idUtilizador) {
+        return grupoService.findByUtilizadorId(idUtilizador);
     }
 
-    /*
-{
-  "nome": "Amigos do ISPTEC"
-}
-    */
+    @GetMapping("/getGrupoById")
+    public Grupo getGrupoById(@RequestParam Integer id) {
+        return grupoService.findById(id);
+    }
 
 }

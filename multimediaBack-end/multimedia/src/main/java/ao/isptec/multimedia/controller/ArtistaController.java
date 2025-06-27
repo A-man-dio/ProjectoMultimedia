@@ -2,46 +2,42 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.Artista;
 import ao.isptec.multimedia.service.ArtistaService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/artistas")
+@RequestMapping("/Artista")
 public class ArtistaController {
 
-    private final ArtistaService service;
+    @Autowired
+    private ArtistaService artistaService;
 
-    public ArtistaController(ArtistaService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public Artista saveArtista(@RequestBody Artista artista) {
+        return artistaService.save(artista);
     }
 
-    @GetMapping
-    public List<Artista> listar() {
-        return service.listarTodos();
+    @DeleteMapping("/delete")
+    public void deleteArtista(@RequestBody Artista artista) {
+        artistaService.delete(artista);
     }
 
-    @GetMapping("/{id}")
-    public Artista buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @GetMapping("/getAll")
+    public List<Artista> getAllArtistas() {
+        return artistaService.getAllArtistas();
     }
 
-    @PostMapping
-    public Artista criar(@RequestBody Artista artista) {
-        return service.criar(artista);
+    @GetMapping("/getArtistasByNomeContendo")
+    public List<Artista> getArtistasByNomeContendo(@RequestParam String nome) {
+        return artistaService.findByNomeContainingIgnoreCase(nome);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/getArtistaById")
+    public Artista getArtistaById(@RequestParam Integer id) {
+        return artistaService.findById(id);
     }
 
-    /*
-{
-  "nome": "Grupo arroz",
-  "biografia": "Grupo fundado em 2005",
-  "dataInicio": "2005-01-01",
-  "dataFim": null
-}
-    */
 }

@@ -8,23 +8,28 @@ import java.time.LocalTime;
 @Entity
 
 public class Video {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String titulo;
     private String descricao;
-    private java.time.LocalTime duracao;
+    private LocalTime duracao;
     private String formato;
     private Integer tamanho;
     private String caminhoFicheiro;
+    private LocalDate dataLancamento;
+    private String autor;
+
     @ManyToOne
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
+
     @ManyToOne
-    @JoinColumn(name = "idUploader", nullable = false)
-    private Utilizador uploader;
-    private java.time.LocalDate dataLancamento;
+    @JoinColumn(name = "idMusica") //um vídeo pode ser de uma música
+    private Musica musica;
+
 
     public Integer getId() {
         return id;
@@ -90,14 +95,6 @@ public class Video {
         this.categoria = categoria;
     }
 
-    public Utilizador getUploader() {
-        return uploader;
-    }
-
-    public void setUploader(Utilizador uploader) {
-        this.uploader = uploader;
-    }
-
     public LocalDate getDataLancamento() {
         return dataLancamento;
     }
@@ -105,4 +102,13 @@ public class Video {
     public void setDataLancamento(LocalDate dataLancamento) {
         this.dataLancamento = dataLancamento;
     }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
 }

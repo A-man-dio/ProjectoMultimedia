@@ -2,33 +2,41 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Grupo;
 import ao.isptec.multimedia.repository.GrupoRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GrupoService {
 
-    private final GrupoRepository repo;
+    @Autowired
+    private GrupoRepository repository;
 
-    public GrupoService(GrupoRepository repo) {
-        this.repo = repo;
+    public Grupo save(Grupo grupo) {
+        return repository.save(grupo);
     }
 
-    public List<Grupo> listarTodos() {
-        return repo.findAll();
+    public void delete(Grupo grupo) {
+        repository.delete(grupo);
     }
 
-    public Optional<Grupo> buscarPorId(Integer id) {
-        return repo.findById(id);
+    public List<Grupo> getAllGrupos() {
+        return repository.findAll();
     }
 
-    public Grupo criar(Grupo g) {
-        return repo.save(g);
+    public List<Grupo> findByNomeContainingIgnoreCase(String nome) {
+        return repository.findByNomeContainingIgnoreCase(nome);
     }
 
-    public void deletar(Integer id) {
-        repo.deleteById(id);
+    public List<Grupo> findByUtilizadorId(Integer idUtilizador) {
+        return repository.findByUtilizadorId(idUtilizador);
     }
+
+    
+    public Grupo findById(Integer id) {
+        return repository.findById(id).orElse(null);
+    }
+    
 }

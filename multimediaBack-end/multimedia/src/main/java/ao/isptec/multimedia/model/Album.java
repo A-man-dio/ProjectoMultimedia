@@ -6,17 +6,17 @@ import java.time.LocalDate;
 
 @Entity
 public class Album {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String titulo;
     private String descricao;
-    @ManyToOne
-    @JoinColumn(name = "idArtista", nullable = false)
-    private Artista artista;
-    private java.time.LocalDate dataLancamento;
+    private LocalDate dataLancamento;
+    private String caminhoFoto;
 
+    
     public Integer getId() {
         return id;
     }
@@ -41,14 +41,6 @@ public class Album {
         this.descricao = descricao;
     }
 
-    public Artista getArtista() {
-        return artista;
-    }
-
-    public void setArtista(Artista artista) {
-        this.artista = artista;
-    }
-
     public LocalDate getDataLancamento() {
         return dataLancamento;
     }
@@ -56,4 +48,14 @@ public class Album {
     public void setDataLancamento(LocalDate dataLancamento) {
         this.dataLancamento = dataLancamento;
     }
+
+    public String getCaminhoFoto() {
+        return caminhoFoto;
+    }
+
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
+    }
+
+    
 }

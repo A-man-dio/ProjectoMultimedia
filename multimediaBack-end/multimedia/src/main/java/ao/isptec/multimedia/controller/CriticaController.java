@@ -2,46 +2,47 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.Critica;
 import ao.isptec.multimedia.service.CriticaService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/criticas")
+@RequestMapping("/Critica")
 public class CriticaController {
 
-    private final CriticaService service;
+    @Autowired
+    private CriticaService criticaService;
 
-    public CriticaController(CriticaService service) {
-        this.service = service;
+    @PostMapping("/save")
+    public Critica saveCritica(@RequestBody Critica critica) {
+        return criticaService.save(critica);
     }
 
-    @GetMapping
-    public List<Critica> listar() {
-        return service.listarTodas();
+    @DeleteMapping("/delete")
+    public void deleteCritica(@RequestBody Critica critica) {
+        criticaService.delete(critica);
     }
 
-    @GetMapping("/{id}")
-    public Critica buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @GetMapping("/getAll")
+    public List<Critica> getAllCriticas() {
+        return criticaService.getAllCriticas();
     }
 
-    @PostMapping
-    public Critica criar(@RequestBody Critica critica) {
-        return service.criar(critica);
+    @GetMapping("/getCriticasByUtilizadorId")
+    public List<Critica> getCriticasByUtilizadorId(@RequestParam Integer idUtilizador) {
+        return criticaService.findByUtilizadorId(idUtilizador);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/getCriticasByAlbumId")
+    public List<Critica> getCriticasByAlbumId(@RequestParam Integer idAlbum) {
+        return criticaService.findByAlbumId(idAlbum);
     }
-    /*
-{
-  "idUtilizador": 1,
-  "idAlbum": 2,
-  "pontuacao": 4,
-  "comentario": "Excelente álbum!",
-  "dataCritica": "2025-06-15T10:30:00"
-}
-*/
+
+    @GetMapping("/getCriticaById")
+    public Critica getCriticaById(@RequestParam Integer id) {
+        return criticaService.findById(id);
+    }
+
 }

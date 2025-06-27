@@ -2,48 +2,67 @@ package ao.isptec.multimedia.controller;
 
 import ao.isptec.multimedia.model.Utilizador;
 import ao.isptec.multimedia.service.UtilizadorService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/utilizadores")
+@RequestMapping("/Utilizador")
 public class UtilizadorController {
 
-    private final UtilizadorService service;
+    @Autowired
+    private UtilizadorService utilizadorService;
 
-    public UtilizadorController(UtilizadorService service) {
-        this.service = service;
+    @GetMapping("/getAll")
+    public List<Utilizador> getAllUtilizadores() {
+        return utilizadorService.getAllUtilizadores();
     }
 
-    @GetMapping
-    public List<Utilizador> listar() {
-        return service.listarTodos();
+    @GetMapping("/getUtilizadorByUsername")
+    public ResponseEntity<Utilizador> getUtilizadorByUsername(@RequestParam String username) {
+        Utilizador utilizador = utilizadorService.findByUserName(username);
+        if (utilizador == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404 se não encontrado
+        }
+        return ResponseEntity.ok(utilizador);
     }
 
-    @GetMapping("/{id}")
-    public Utilizador buscarPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id).orElse(null);
+    @GetMapping("/getUtilizadorByEmail")
+    public ResponseEntity<Utilizador> getUtilizadorByEmail(@RequestParam String email) {
+        Utilizador utilizador = utilizadorService.findByEmail(email);
+        if (utilizador == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404 se não encontrado
+        }
+        return ResponseEntity.ok(utilizador);
     }
 
-    @PostMapping
-    public Utilizador criar(@RequestBody Utilizador u) {
-        return service.criar(u);
+    @GetMapping("/getUtilizadorByUsernameAndSenha")
+    public ResponseEntity<Utilizador> getUtilizadorByUsernameAndSenha(@RequestParam String username,
+            @RequestParam String senha) {
+        Utilizador utilizador = utilizadorService.findByUserNameAndSenha(username, senha);
+        if (utilizador == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404 se não encontrado
+        }
+        return ResponseEntity.ok(utilizador);
     }
 
-    @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
-        service.deletar(id);
+    @PostMapping("/save")
+    public Utilizador saveUtilizador(@RequestBody Utilizador utilizador) {
+        return utilizadorService.save(utilizador);
     }
 
-    /*
-    postman teste
-{
-  "nomeDeUtilizador": "ernesto",
-  "email": "ernesto@isptec.ao",
-  "senha": "123456",
-  "tipo": 2
-}
-*/
+    @DeleteMapping("/delete")
+    public void deleteUtilizador(@RequestBody Utilizador utilizador) {
+        utilizadorService.delete(utilizador);
+    }
+
+    @GetMapping("/getUtilizadorById")
+    public Utilizador getUtilizadorById(@RequestParam Integer id) {
+        return utilizadorService.findById(id);
+    }
 
 }

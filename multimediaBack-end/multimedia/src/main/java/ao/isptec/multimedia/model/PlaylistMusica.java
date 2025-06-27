@@ -3,39 +3,42 @@ package ao.isptec.multimedia.model;
 import jakarta.persistence.*;
 
 @Entity
-
-@IdClass(PlaylistMusicaId.class)
 public class PlaylistMusica {
-    @Id
-    private Integer idPlaylist;
 
     @Id
-    private Integer idMusica;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    private Integer ordem;
+    @ManyToOne
+    @JoinColumn(name = "idPlaylist", nullable = false)
+    private Playlist playlist;
 
-    public Integer getIdPlaylist() {
-        return idPlaylist;
+    @ManyToOne
+    @JoinColumn(name = "idMusica", nullable = false)
+    private Musica musica;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdPlaylist(Integer idPlaylist) {
-        this.idPlaylist = idPlaylist;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Integer getIdMusica() {
-        return idMusica;
+    public Playlist getPlaylist() {
+        return playlist;
     }
 
-    public void setIdMusica(Integer idMusica) {
-        this.idMusica = idMusica;
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
     }
 
-    public Integer getOrdem() {
-        return ordem;
+    public Musica getMusica() {
+        return musica;
     }
 
-    public void setOrdem(Integer ordem) {
-        this.ordem = ordem;
+    public void setMusica(Musica musica) {
+        this.musica = musica;
     }
+
 }
-

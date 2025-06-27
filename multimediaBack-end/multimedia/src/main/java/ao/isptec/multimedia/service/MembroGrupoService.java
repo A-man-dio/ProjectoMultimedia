@@ -1,35 +1,49 @@
 package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.MembroGrupo;
-import ao.isptec.multimedia.model.MembroGrupoId;
 import ao.isptec.multimedia.repository.MembroGrupoRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MembroGrupoService {
 
-    private final MembroGrupoRepository repo;
+   @Autowired
+    private MembroGrupoRepository repository;
 
-    public MembroGrupoService(MembroGrupoRepository repo) {
-        this.repo = repo;
+    public MembroGrupo save(MembroGrupo membroGrupo) {
+        return repository.save(membroGrupo);
     }
 
-    public List<MembroGrupo> listarTodos() {
-        return repo.findAll();
+    public void delete(MembroGrupo membroGrupo) {
+        repository.delete(membroGrupo);
     }
 
-    public Optional<MembroGrupo> buscarPorId(MembroGrupoId id) {
-        return repo.findById(id);
+    public List<MembroGrupo> getAllMembrosGrupo() {
+        return repository.findAll();
     }
 
-    public MembroGrupo criar(MembroGrupo m) {
-        return repo.save(m);
+    public List<MembroGrupo> findByUtilizadorId(Integer idUtilizador) {
+        return repository.findByUtilizadorId(idUtilizador);
     }
 
-    public void deletar(MembroGrupoId id) {
-        repo.deleteById(id);
+    public List<MembroGrupo> findByGrupoId(Integer idGrupo) {
+        return repository.findByGrupoId(idGrupo);
+    }
+
+    public List<MembroGrupo> findByPapel(Integer papel) {
+        return repository.findByPapel(papel);
+    }
+
+    public List<MembroGrupo> findByEstado(Integer estado) {
+        return repository.findByEstado(estado);
+    }
+
+    
+    public MembroGrupo findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 }

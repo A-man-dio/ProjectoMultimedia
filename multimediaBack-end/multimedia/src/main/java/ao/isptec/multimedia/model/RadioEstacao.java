@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 
 @Entity
 public class RadioEstacao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String nome;
     private String urlStream;
     private String pais;
-    private String genero;
 
     public Integer getId() {
         return id;
@@ -43,13 +42,5 @@ public class RadioEstacao {
 
     public void setPais(String pais) {
         this.pais = pais;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
     }
 }

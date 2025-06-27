@@ -2,33 +2,39 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Categoria;
 import ao.isptec.multimedia.repository.CategoriaRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoriaService {
 
-    private final CategoriaRepository repo;
+    @Autowired
+    private CategoriaRepository repository;
 
-    public CategoriaService(CategoriaRepository repo) {
-        this.repo = repo;
+    public Categoria save(Categoria categoria) {
+        return repository.save(categoria);
     }
 
-    public List<Categoria> listarTodas() {
-        return repo.findAll();
+    public void delete(Categoria categoria) {
+        repository.delete(categoria);
     }
 
-    public Optional<Categoria> buscarPorId(Integer id) {
-        return repo.findById(id);
+    public List<Categoria> getAllCategorias() {
+        return repository.findAll();
     }
 
-    public Categoria criar(Categoria c) {
-        return repo.save(c);
+    public Categoria findByNome(String nome) {
+        return repository.findByNome(nome);
     }
 
-    public void deletar(Integer id) {
-        repo.deleteById(id);
+    public List<Categoria> findByNomeContainingIgnoreCase(String nome) {
+        return repository.findByNomeContainingIgnoreCase(nome);
+    }
+
+    public Categoria findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 }

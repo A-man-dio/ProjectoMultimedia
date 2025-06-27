@@ -2,33 +2,35 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.RadioEstacao;
 import ao.isptec.multimedia.repository.RadioEstacaoRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RadioEstacaoService {
 
-    private final RadioEstacaoRepository repo;
+    @Autowired
+    private RadioEstacaoRepository repository;
 
-    public RadioEstacaoService(RadioEstacaoRepository repo) {
-        this.repo = repo;
+    public RadioEstacao save(RadioEstacao radioEstacao) {
+        return repository.save(radioEstacao);
     }
 
-    public List<RadioEstacao> listarTodas() {
-        return repo.findAll();
+    public void delete(RadioEstacao radioEstacao) {
+        repository.delete(radioEstacao);
     }
 
-    public Optional<RadioEstacao> buscarPorId(Integer id) {
-        return repo.findById(id);
+    public List<RadioEstacao> getAllRadioEstacoes() {
+        return repository.findAll();
     }
 
-    public RadioEstacao criar(RadioEstacao r) {
-        return repo.save(r);
+    public List<RadioEstacao> findByNomeContainingIgnoreCase(String nome) {
+        return repository.findByNomeContainingIgnoreCase(nome);
     }
 
-    public void deletar(Integer id) {
-        repo.deleteById(id);
+    public RadioEstacao findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 }
