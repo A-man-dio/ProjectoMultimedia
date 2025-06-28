@@ -9,26 +9,27 @@ export class UtilizadorService {
 
   constructor() { }
 
-  httpClient = inject(HttpClient);
+  private baseUrl = 'http://localhost:8080/Utilizador';
+  private httpClient = inject(HttpClient);
 
   createUtilizador(utilizador: Utilizador) {
-    return this.httpClient.post<Utilizador>("http://localhost:8080/Utilizador/save", utilizador);
+    return this.httpClient.post<Utilizador>(`${this.baseUrl}/save`, utilizador);
   }
 
   getUtilizadorByUserName(username: string) {
-    return this.httpClient.get<Utilizador>(`http://localhost:8080/Utilizador/getUtilizadorByUsername?username=${username}`);
+    return this.httpClient.get<Utilizador>(`${this.baseUrl}/getUtilizadorByUsername?username=${username}`);
   }
 
   getUtilizadorByEmail(email: string) {
-    return this.httpClient.get<Utilizador>(`http://localhost:8080/Utilizador/getUtilizadorByEmail?email=${email}`);
+    return this.httpClient.get<Utilizador>(`${this.baseUrl}/getUtilizadorByEmail?email=${email}`);
   }
 
   getUtilizadorByUserNameAndSenha(username: string, senha: string) {
-    return this.httpClient.get<Utilizador>(`http://localhost:8080/Utilizador/getUtilizadorByUsernameAndSenha?username=${username}&senha=${senha}`);
+    return this.httpClient.get<Utilizador>(`${this.baseUrl}/getUtilizadorByUsernameAndSenha?username=${username}&senha=${senha}`);
   }
 
   getAllUtilizadores() {
-    return this.httpClient.get<Array<Utilizador>>("http://localhost:8080/Utilizador/getAll");
+    return this.httpClient.get<Utilizador[]>(`${this.baseUrl}/getAll`);
   }
 
 

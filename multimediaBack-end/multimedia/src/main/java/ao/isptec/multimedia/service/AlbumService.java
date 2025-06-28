@@ -30,7 +30,10 @@ public class AlbumService {
         return repository.findByTituloContainingIgnoreCase(titulo);
     }
 
-    
+    public List<Album> findByUtilizadorId(Integer idUtilizador) {
+        return repository.findByUtilizadorId(idUtilizador);
+    }
+
     public Album findById(Integer id) {
         return repository.findById(id).orElse(null);
     }

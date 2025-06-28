@@ -9,18 +9,18 @@ public class MeuCarregado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Boolean vinculoDireto; // true se o conteúdo for vinculado diretamente ao grupo
+    private Boolean vinculoDireto; // true se o conteúdo for vinculado/criado diretamente ao grupo , e false se só tiver nos meus carregados
 
     @ManyToOne
     @JoinColumn(name = "idUtilizador", nullable = false)
-    private Utilizador utilizador;
+    private Utilizador utilizador;  //meu carregado de um utilizador
 
     @ManyToOne
-    @JoinColumn(name = "idVideo")
+    @JoinColumn(name = "idVideo") //o meu carregado pode ser uma música ou vídeo
     private Video video;
 
     @ManyToOne
-    @JoinColumn(name = "idMusica")
+    @JoinColumn(name = "idMusica") //o meu carregado pode ser uma música ou vídeo
     private Musica musica;
 
     public Integer getId() {

@@ -38,6 +38,10 @@ public class ConteudoGrupoService {
         return repository.findByVideoId(idVideo);
     }
 
+    public List<ConteudoGrupo> findByUtilizadorId(Integer idUtilizador) {
+        return repository.findByUtilizadorId(idUtilizador);
+    }
+
     public ConteudoGrupo findById(Integer id) {
         return repository.findById(id).orElse(null);
     }

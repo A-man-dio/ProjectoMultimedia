@@ -3,8 +3,10 @@ import { UtilizadorService } from '../../services/utilizador.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Utilizador } from '../../models/Utilizador';
+import { SharedDataService } from '../../services/shared-data.service';
+import { share } from 'rxjs';
 
 @Component({
   selector: 'app-pagina-login-registo',
@@ -16,6 +18,8 @@ export class PaginaLoginRegistoComponent {
 
   @ViewChild('container') containerRef!: ElementRef;
   utilizadorService = inject(UtilizadorService);
+  sharedDataService = inject(SharedDataService);
+  router = inject(Router);
   toast = inject(ToastrService);
 
   //registo
@@ -86,7 +90,7 @@ export class PaginaLoginRegistoComponent {
 
   }
 
-   verificarEmail() {
+  verificarEmail() {
 
     this.utilizadorService.getUtilizadorByEmail(this.email).subscribe({
       next: (res) => {
@@ -147,10 +151,18 @@ export class PaginaLoginRegistoComponent {
 
     this.utilizadorService.getUtilizadorByUserNameAndSenha(this.usernameLogin, this.senhaLogin).subscribe({
       next: (res) => {
-        this.toast.success('Usuário encontrado', 'Sucesso!', { closeButton: true });
+        //this.toast.success('Usuário encontrado', 'Sucesso!', { closeButton: true });
         console.log(res);
+        this.sharedDataService.usuarioLogado = res;
         this.usernameLogin = "";
         this.senhaLogin = "";
+
+        if (res.tipo == 1) {
+          this.router.navigate(['/pagina-inicial']);
+        } else {
+          this.toast.success('Usuário encontrado', 'Sucesso!', { closeButton: true });
+        }
+
       },
       error: (err) => {
         if (err.status === 404) {
@@ -169,17 +181,17 @@ export class PaginaLoginRegistoComponent {
   }
 
   getLocalDateTimeForMySQL(): string {
-  const now = new Date();
+    const now = new Date();
 
-  const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const day = now.getDate().toString().padStart(2, '0');
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const seconds = now.getSeconds().toString().padStart(2, '0');
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
 
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-}
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  }
 
 
 }

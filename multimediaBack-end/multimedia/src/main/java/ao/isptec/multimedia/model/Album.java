@@ -16,7 +16,10 @@ public class Album {
     private LocalDate dataLancamento;
     private String caminhoFoto;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "idUtilizador", nullable = false)
+    private Utilizador utilizador;
+
     public Integer getId() {
         return id;
     }
@@ -57,5 +60,12 @@ public class Album {
         this.caminhoFoto = caminhoFoto;
     }
 
-    
+    public Utilizador getUtilizador() {
+        return utilizador;
+    }
+
+    public void setUtilizador(Utilizador utilizador) {
+        this.utilizador = utilizador;
+    }
+
 }

@@ -9,5 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlbumRepository extends JpaRepository<Album, Integer> {
     List<Album> findByTituloContainingIgnoreCase(String titulo);
+
     Optional<Album> findById(Integer id);
+
+    List<Album> findByUtilizadorId(Integer idUtilizador);
 }

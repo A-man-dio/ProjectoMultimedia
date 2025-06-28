@@ -35,6 +35,11 @@ public class AlbumController {
         return albumService.findByTituloContainingIgnoreCase(titulo);
     }
 
+    @GetMapping("/getAlbunsByUtilizadorId")
+    public List<Album> getAlbunsByUtilizadorId(@RequestParam Integer idUtilizador) {
+        return albumService.findByUtilizadorId(idUtilizador);
+    }
+
     @GetMapping("/getAlbumById")
     public Album getAlbumById(@RequestParam Integer id) {
         return albumService.findById(id);

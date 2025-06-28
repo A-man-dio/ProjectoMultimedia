@@ -30,6 +30,11 @@ public class CategoriaController {
         return ResponseEntity.ok(categoria);
     }
 
+    @GetMapping("/getCategoriaByTipo")
+    public List<Categoria> getCategoriaByTipo(@RequestParam Integer tipo) {
+        return categoriaService.findByTipo(tipo);
+    }
+
     @PostMapping("/save")
     public Categoria saveCategoria(@RequestBody Categoria categoria) {
         return categoriaService.save(categoria);

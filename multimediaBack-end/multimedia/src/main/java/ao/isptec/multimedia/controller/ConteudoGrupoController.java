@@ -45,6 +45,11 @@ public class ConteudoGrupoController {
         return conteudoGrupoService.findByVideoId(idVideo);
     }
 
+    @GetMapping("/getConteudosGruposByUtilizadorId")
+    public List<ConteudoGrupo> getConteudosGruposByUtilizadorId(@RequestParam Integer idUtilizador) {
+        return conteudoGrupoService.findByUtilizadorId(idUtilizador);
+    }
+
     @GetMapping("/getConteudoGrupoById")
     public ConteudoGrupo getConteudoGrupoById(@RequestParam Integer id) {
         return conteudoGrupoService.findById(id);

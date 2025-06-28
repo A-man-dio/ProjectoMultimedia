@@ -1,0 +1,357 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: #121212;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 196px;
+    background-color: #000000;
+    padding: 24px;
+}
+
+.sidebar .logo {
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar p {
+    font-size: 20px;
+}
+
+.emoji {
+    font-size: 30px;
+}
+
+.sidebar .navigation ul {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.sidebar .navigation ul li {
+    padding: 10px 0px;
+}
+
+.sidebar .navigation ul li a {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.sidebar .navigation ul li a:hover,
+.sidebar .navigation ul li a:active,
+.sidebar .navigation ul li a:focus {
+    color: #ffffff;
+}
+
+.sidebar .navigation ul li a:hover .fa,
+.sidebar .navigation ul li a:active .fa,
+.sidebar .navigation ul li a:focus .fa {
+    color: #b3b3b3;
+}
+
+.sidebar .navigation ul li .fa {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.sidebar .navigation ul li a:hover .fa:hover,
+.sidebar .navigation ul li a:hover .fa:active,
+.sidebar .navigation ul li a:hover .fa:focus {
+    color: #ffffff;
+}
+
+.sidebar .policies {
+    position: absolute;
+    bottom: 100px;
+}
+
+.sidebar .policies ul {
+    list-style: none;
+}
+
+.sidebar .policies ul li {
+    padding-bottom: 5px;
+}
+
+.sidebar .policies ul li a {
+    color: #b3b3b3;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 10px;
+}
+
+.sidebar .policies ul li a:hover,
+.sidebar .policies ul li a:active,
+.sidebar .policies ul li a:focus {
+    text-decoration: underline;
+}
+
+.main-container {
+    background-color: #121212;
+    margin-left: 245px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #101010;
+    padding: 14px 30px;
+}
+
+.topbar .prev-next-buttons button {
+    color: #7a7a7a;
+    cursor: not-allowed;
+    width: 34px;
+    height: 34px;
+    border-radius: 100%;
+    font-size: 18px;
+    border: 0px;
+    background-color: white;
+    margin-right: 10px;
+}
+
+.topbar .navbar {
+    display: flex;
+    align-items: center;
+}
+
+.topbar .navbar ul {
+    list-style: none;
+}
+
+.topbar .navbar ul li {
+    display: inline-block;
+    margin: 0px 8px;
+    width: 70px;
+}
+
+.topbar .navbar ul li a {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.topbar .navbar ul li a:hover,
+.topbar .navbar ul li a:active,
+.topbar .navbar ul li a:focus {
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.topbar .navbar ul li.divider {
+    color: #ffffff;
+    font-size: 26px;
+    margin: 0px 20px;
+    width: auto;
+}
+
+.topbar .navbar button {
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 14px 30px;
+    border: 0px;
+    border-radius: 40px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.topbar .navbar button:hover,
+.topbar .navbar button:active,
+.topbar .navbar button:focus {
+    background-color: #f2f2f2;
+}
+
+.categorias {
+    padding: 20px 40px;
+}
+
+.categorias h2 {
+    color: #ffffff;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.categorias .list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.categorias .list .item {
+    flex: 0 0 auto;
+    width: 150px;
+    padding: 15px;
+    background-color: #181818;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all ease 0.4s;
+}
+
+.categorias .list .item:hover {
+    background-color: #252525;
+}
+
+.categorias .list .item img {
+
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.categorias .list .item .play {
+    position: relative;
+}
+
+.categorias .list .item .play .fa {
+    position: absolute;
+    right: 10px;
+    top: -60px;
+    padding: 18px;
+    background-color: #1db954;
+    border-radius: 100%;
+    opacity: 0;
+    transition: all ease 0.4s;
+}
+
+.categorias .list .item:hover .play .fa {
+    opacity: 1;
+    transform: translateY(-20px);
+}
+
+.categorias .list .item h4 {
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.categorias .list .item p {
+    color: #989898;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 600;
+}
+
+.categorias hr {
+    margin: 70px 0px 0px;
+    border-color: #636363;
+}
+
+.categorias .list::-webkit-scrollbar {
+    height: 5px;
+}
+
+.categorias .list::-webkit-scrollbar-track {
+    background: #101010;
+    /* cor do trilho da scrollbar */
+    border-radius: 4px;
+}
+
+.categorias .list::-webkit-scrollbar-thumb {
+    background-color: #1db954;
+    /* cor da parte arrastável */
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.categorias .list::-webkit-scrollbar-thumb:hover {
+    background-color: #1ed760;
+    /* cor ao passar o mouse */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #181818;
+    /* fundo escuro, igual ao input */
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 0 12px;
+    height: 36px;
+    width: 300px;
+}
+
+.search-bar input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    padding: 8px 0;
+}
+
+.search-bar .emoji {
+    font-size: 16px;
+    color: #b3b3b3;
+    margin-left: 8px;
+    background-color: transparent;
+    user-select: none;
+    cursor: pointer;
+}
+
+.search-bar .emoji:hover {
+    color: #ffffff;
+}
+
+.topbar .search-bar input::placeholder {
+    color: #b3b3b3;
+}
+
+
+.topbar .search-bar .fa-search {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b3b3b3;
+    pointer-events: none;
+    font-size: 16px;
+}
+
+.topbar .user-profile {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    background-color: #181818;
+    padding: 8px 14px;
+    border-radius: 20px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+    gap: 8px;
+    cursor: default;
+    transition: background-color 0.3s ease;
+}
+
+.topbar .user-profile:hover {
+    background-color: #2a2a2a;
+}
+
+.topbar .user-profile .emoji {
+    font-size: 18px;
+}
+
+.search-bar .emoji {
+    font-size: 19px;
+    color: #b3b3b3;
+}

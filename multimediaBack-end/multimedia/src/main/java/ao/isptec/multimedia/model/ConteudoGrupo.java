@@ -11,15 +11,19 @@ public class ConteudoGrupo {
 
     @ManyToOne
     @JoinColumn(name = "idGrupo", nullable = false)
-    private Grupo grupo;
+    private Grupo grupo; // id do grupo na qual o conteudo pertence
 
     @ManyToOne
-    @JoinColumn(name = "idVideo")
+    @JoinColumn(name = "idVideo") // esse conteudo pode ser uma música ou vídeo
     private Video video;
 
     @ManyToOne
-    @JoinColumn(name = "idMusica")
+    @JoinColumn(name = "idMusica") // esse conteudo pode ser uma música ou vídeo
     private Musica musica;
+
+    @ManyToOne
+    @JoinColumn(name = "idUtilizador", nullable = false)
+    private Utilizador utilizador; // utilizador que postou esse contéudo no grupo
 
     public Integer getId() {
         return id;
@@ -52,5 +56,15 @@ public class ConteudoGrupo {
     public void setMusica(Musica musica) {
         this.musica = musica;
     }
+
+    public Utilizador getUtilizador() {
+        return utilizador;
+    }
+
+    public void setUtilizador(Utilizador utilizador) {
+        this.utilizador = utilizador;
+    }
+
+    
 
 }

@@ -14,6 +14,7 @@ public class Categoria {
     private String nome;
     
     private String descricao;
+    private Integer tipo; //1 -musica , 2 - video
 
     public Integer getId() {
         return id;
@@ -38,4 +39,14 @@ public class Categoria {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public Integer getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Integer tipo) {
+        this.tipo = tipo;
+    }
+
+    
 }

@@ -30,6 +30,10 @@ public class CategoriaService {
         return repository.findByNome(nome);
     }
 
+    public List<Categoria> findByTipo(Integer tipo) {
+        return repository.findByTipo(tipo);
+    }
+
     public List<Categoria> findByNomeContainingIgnoreCase(String nome) {
         return repository.findByNomeContainingIgnoreCase(nome);
     }

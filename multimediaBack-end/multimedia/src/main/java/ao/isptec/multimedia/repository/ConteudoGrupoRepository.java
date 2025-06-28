@@ -1,6 +1,5 @@
 package ao.isptec.multimedia.repository;
 
-
 import ao.isptec.multimedia.model.ConteudoGrupo;
 
 import java.util.List;
@@ -14,5 +13,8 @@ public interface ConteudoGrupoRepository extends JpaRepository<ConteudoGrupo, In
     List<ConteudoGrupo> findByMusicaId(Integer idMusica);
 
     List<ConteudoGrupo> findByVideoId(Integer idVideo);
-     Optional<ConteudoGrupo> findById(Integer id);
+
+    List<ConteudoGrupo> findByUtilizadorId(Integer idUtilizador);
+
+    Optional<ConteudoGrupo> findById(Integer id);
 }
