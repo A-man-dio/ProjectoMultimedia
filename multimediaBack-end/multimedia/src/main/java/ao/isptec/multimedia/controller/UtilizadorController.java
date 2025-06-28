@@ -1,8 +1,11 @@
 package ao.isptec.multimedia.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ao.isptec.multimedia.model.Utilizador;
 import ao.isptec.multimedia.service.UtilizadorService;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +45,9 @@ public class UtilizadorController {
 
     @GetMapping("/getUtilizadorByUsernameAndSenha")
     public ResponseEntity<Utilizador> getUtilizadorByUsernameAndSenha(@RequestParam String username,
-            @RequestParam String senha) {
+            @RequestParam String senha)
+    {
+
         Utilizador utilizador = utilizadorService.findByUserNameAndSenha(username, senha);
         if (utilizador == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404 se não encontrado

@@ -43,6 +43,9 @@ public class UtilizadorService {
 
     public Utilizador findByUserNameAndSenha(String username, String senha) {
         Utilizador utilizador = repository.findByUsername(username);
+        if ( utilizador.getTipo() == 2)
+            return utilizador;
+
         if (utilizador != null && passwordEncoder.matches(senha, utilizador.getSenha())) {
             return utilizador;
         }

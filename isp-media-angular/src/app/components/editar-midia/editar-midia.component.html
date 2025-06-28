@@ -1,0 +1,55 @@
+<div class="main-container">
+    <div class="topbar">
+        <div class="prev-next-buttons">
+            <button type="button" (click)="voltar()">Voltar</button>
+        </div>
+        <div class="user-profile">
+            <span class="emoji">👤</span>
+            <span class="username">{{ username }}</span>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h2 *ngIf="tipo === 'artista'">Editar Artista</h2>
+        <h2 *ngIf="tipo === 'album'">Editar Álbum</h2>
+
+        <form *ngIf="tipo === 'artista'" (ngSubmit)="salvar()">
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" [(ngModel)]="artista.nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label>Biografia</label>
+                <textarea [(ngModel)]="artista.biografia" name="biografia" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Foto</label>
+                <input type="file" (change)="onFileSelected($event)">
+                <img *ngIf="artista.caminhoFoto" [src]="'http://localhost:8080' + artista.caminhoFoto"
+                    class="preview-img">
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+
+        <form *ngIf="tipo === 'album'" (ngSubmit)="salvar()">
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" [(ngModel)]="album.titulo" name="titulo" required>
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea [(ngModel)]="album.descricao" name="descricao" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Data de Lançamento</label>
+                <input type="date" [(ngModel)]="album.dataLancamento" name="dataLancamento" required>
+            </div>
+            <div class="form-group">
+                <label>Foto</label>
+                <input type="file" (change)="onFileSelected($event)">
+                <img *ngIf="album.caminhoFoto" [src]="'http://localhost:8080' + album.caminhoFoto" class="preview-img">
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </div>
+</div>

@@ -25,6 +25,7 @@ export class UtilizadorService {
   }
 
   getUtilizadorByUserNameAndSenha(username: string, senha: string) {
+    
     return this.httpClient.get<Utilizador>(`${this.baseUrl}/getUtilizadorByUsernameAndSenha?username=${username}&senha=${senha}`);
   }
 

@@ -1,0 +1,104 @@
+/* Mantém padrão do container principal */
+.main-container {
+  background-color: #121212;
+  min-height: 100vh;
+  padding: 40px;
+  color: #ffffff;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: #101010;
+  padding: 14px 30px;
+  align-items: center;
+}
+
+.prev-next-buttons button {
+  background-color: #1db954;
+  border: none;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.prev-next-buttons button:hover {
+  background-color: #1ed760;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  background-color: #181818;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  gap: 8px;
+}
+
+.user-profile .emoji {
+  font-size: 18px;
+}
+
+.form-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background-color: #181818;
+  padding: 30px;
+  border-radius: 8px;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group textarea {
+  background-color: #121212;
+  border: 1px solid #2a2a2a;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group input[type="file"] {
+  color: #b3b3b3;
+}
+
+.preview-img {
+  display: block;
+  margin-top: 10px;
+  max-width: 200px;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  background-color: #1db954;
+  border: none;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #1ed760;
+}

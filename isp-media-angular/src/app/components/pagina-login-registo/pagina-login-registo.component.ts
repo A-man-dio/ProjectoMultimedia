@@ -139,6 +139,7 @@ export class PaginaLoginRegistoComponent {
     });
   }
 
+
   fazerLogin() {
 
     if (this.usernameLogin == "") {
@@ -159,7 +160,8 @@ export class PaginaLoginRegistoComponent {
 
         if (res.tipo == 1) {
           this.router.navigate(['/pagina-inicial']);
-        } else {
+        } else if(res.tipo == 2) {
+          this.router.navigate(['/pagina-inicial-adm']);
           this.toast.success('Usuário encontrado', 'Sucesso!', { closeButton: true });
         }
 

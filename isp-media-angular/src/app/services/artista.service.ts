@@ -12,6 +12,7 @@ export class ArtistaService {
   private baseUrl = "http://localhost:8080/Artista";
   private httpClient = inject(HttpClient);
 
+
   createArtista(artista: Artista) {
     return this.httpClient.post<Artista>(`${this.baseUrl}/save`, artista);
   }

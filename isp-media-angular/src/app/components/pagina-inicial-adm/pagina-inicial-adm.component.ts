@@ -1,19 +1,20 @@
 import { Component, inject } from '@angular/core';
-import { Artista } from '../../models/Artista';
-import { ArtistaService } from '../../services/artista.service';
-import { CommonModule } from '@angular/common';
-import { SharedDataService } from '../../services/shared-data.service';
 import { Album } from '../../models/Album';
+import { Artista } from '../../models/Artista';
 import { AlbumService } from '../../services/album.service';
+import { ArtistaService } from '../../services/artista.service';
+import { SharedDataService } from '../../services/shared-data.service';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-pagina-inicial',
+  selector: 'app-pagina-inicial-adm',
   imports: [CommonModule],
-  templateUrl: './pagina-inicial.component.html',
-  styleUrl: './pagina-inicial.component.scss'
+  templateUrl: './pagina-inicial-adm.component.html',
+  styleUrl: './pagina-inicial-adm.component.scss'
 })
-export class PaginaInicialComponent {
-
+export class PaginaInicialAdmComponent {
+  constructor(private router: Router) {}
   conjuntoArtistas: Artista[] = [];
   conjuntoAlbuns: Album[] = [];
   username: string = "";
@@ -36,8 +37,8 @@ export class PaginaInicialComponent {
       this.conjuntoAlbuns = albuns;
       console.log(this.conjuntoAlbuns);
     });
-
-
   }
-
+  irParaEditarMidia(tipo: string, idMidia: number | null) {
+    this.router.navigate(['/editar-midia', tipo, idMidia]);
+  }
 }
