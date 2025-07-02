@@ -1,0 +1,44 @@
+.container-utilizadores {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.utilizador-item {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 5px;
+  align-items: center;
+  background: #f9f9f9;
+
+  .info {
+    flex: 0 0 60%;
+    font-size: 18px;
+  }
+
+  .acoes {
+    flex: 0 0 40%;
+    text-align: right;
+
+    button {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #c0392b;
+      }
+    }
+  }
+}

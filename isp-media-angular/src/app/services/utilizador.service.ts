@@ -33,5 +33,13 @@ export class UtilizadorService {
     return this.httpClient.get<Utilizador[]>(`${this.baseUrl}/getAll`);
   }
 
+  deleteUtilizador(utilizador: Utilizador) {
+  return this.httpClient.request('DELETE', `${this.baseUrl}/delete`, {
+    body: utilizador,
+    responseType: 'text'
+  });
+}
+
+
 
 }

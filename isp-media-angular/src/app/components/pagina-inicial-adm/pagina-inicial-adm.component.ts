@@ -41,4 +41,8 @@ export class PaginaInicialAdmComponent {
   irParaEditarMidia(tipo: string, idMidia: number | null) {
     this.router.navigate(['/editar-midia', tipo, idMidia]);
   }
+
+  gerirUtilizadores(){
+    this.router.navigate(['/gerir-utilizadores']);
+  }
 }

@@ -30,7 +30,9 @@ public class UtilizadorService {
     }
 
     public void delete(Utilizador utilizador) {
-        repository.delete(utilizador);
+
+        utilizador.setAtivo(0);
+        repository.save(utilizador);
     }
 
     public Utilizador findByUserName(String username) {

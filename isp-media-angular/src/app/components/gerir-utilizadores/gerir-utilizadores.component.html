@@ -1,0 +1,16 @@
+<!-- Exemplo: a Sidebar e o Header estão fora. 
+Aqui é só a div principal de gestão -->
+
+<div class="container-utilizadores">
+  <h2>Gestão de Utilizadores</h2>
+
+  <div class="utilizador-item" *ngFor="let u of utilizadores">
+    <div class="info">
+      <p>{{ u.nome }}</p>
+    </div>
+    <div class="acoes">
+      <button (click)="apagarConta(u)">Apagar conta</button>
+    </div>
+  </div>
+
+</div>
