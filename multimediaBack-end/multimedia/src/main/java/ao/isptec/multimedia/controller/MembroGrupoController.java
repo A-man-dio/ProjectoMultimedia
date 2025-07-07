@@ -50,6 +50,12 @@ public class MembroGrupoController {
         return membroGrupoService.findByEstado(estado);
     }
 
+    @GetMapping("/getMembrosGrupoByEstadoAndUtilizadorId")
+    public List<MembroGrupo> getMembrosGrupoByEstadoAndUtilizadorId(@RequestParam Integer estado,
+            @RequestParam Integer idUtilizador) {
+        return membroGrupoService.findByEstadoAndUtilizadorId(estado, idUtilizador);
+    }
+
     @GetMapping("/getMembroGrupoById")
     public MembroGrupo getMembroGrupoById(@RequestParam Integer id) {
         return membroGrupoService.findById(id);

@@ -6,6 +6,7 @@ export class Grupo {
         public nome: string,
         public descricao: string,
         public dataCriacao: string,
-        public utilizador: Utilizador //que criou o grupo
+        public utilizador: Utilizador, //que criou o grupo
+        public publico : Boolean
     ) { }
 }

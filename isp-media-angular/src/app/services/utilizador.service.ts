@@ -25,21 +25,12 @@ export class UtilizadorService {
   }
 
   getUtilizadorByUserNameAndSenha(username: string, senha: string) {
-    
     return this.httpClient.get<Utilizador>(`${this.baseUrl}/getUtilizadorByUsernameAndSenha?username=${username}&senha=${senha}`);
   }
 
   getAllUtilizadores() {
     return this.httpClient.get<Utilizador[]>(`${this.baseUrl}/getAll`);
   }
-
-  deleteUtilizador(utilizador: Utilizador) {
-  return this.httpClient.request('DELETE', `${this.baseUrl}/delete`, {
-    body: utilizador,
-    responseType: 'text'
-  });
-}
-
 
 
 }

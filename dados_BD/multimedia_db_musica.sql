@@ -39,7 +39,7 @@ CREATE TABLE `musica` (
   KEY `FK2o3u7w2d0rfw9h69ghrer51fq` (`id_categoria`),
   CONSTRAINT `FK2o3u7w2d0rfw9h69ghrer51fq` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id`),
   CONSTRAINT `FKrtg5cc0py68ch4bn877m9hx0n` FOREIGN KEY (`id_album`) REFERENCES `album` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +48,7 @@ CREATE TABLE `musica` (
 
 LOCK TABLES `musica` WRITE;
 /*!40000 ALTER TABLE `musica` DISABLE KEYS */;
-INSERT INTO `musica` VALUES (1,'/files/musicas/brandao085-deondeeuvenho.m3u8','/files/imagens/issoetrap.jpg','2022-01-20','00:02:40.000000','mp3','/files/letras/brandao085-deondeeuvenho.txt',6,'De Onde Eu Venho',1,4),(2,'/files/musicas/brandao085-sonhos.m3u8','/files/imagens/issoetrap.jpg','2022-01-20','00:03:53.000000','mp3','/files/letras/brandao085-sonhos.txt',5,'Sonhos',1,4),(3,'/files/musicas/wiu-coracaodegelo.m3u8','/files/imagens/manualcomoamarerrado.jpg','2022-11-11','00:02:55.000000','mp3','/files/letras/wiu-coracaodegelo.txt',5,'Coração de Gelo',2,4),(4,'/files/musicas/wiu-flowespacial.m3u8','/files/imagens/manualcomoamarerrado.jpg','2022-11-11','00:03:30.000000','mp3','/files/letras/wiu-flowespacial.txt',7,'Flow Espacial',2,4),(5,'/files/musicas/matue-kennyg.m3u8','/files/imagens/maquinadotempo.jpg','2020-08-28','00:02:40.000000','mp3','/files/letras/matue-kennyg.txt',5,'Kenny G',3,4),(6,'/files/musicas/matue-777666.m3u8','/files/imagens/maquinadotempo.jpg','2020-08-28','00:03:05.000000','mp3','/files/letras/matue-777666.txt',6,'777-666',3,4),(7,'/files/musicas/teto-mustangpreto.m3u8','/files/imagens/previaszip.jpg','2022-12-15','00:02:50.000000','mp3','/files/letras/teto-mustangpreto.txt',5,'Mustang Preto',4,4),(8,'/files/musicas/teto-m4.m3u8','/files/imagens/previaszip.jpg','2022-12-15','00:03:10.000000','mp3','/files/letras/teto-m4.txt',6,'M4 (feat. Matuê)',4,4);
+INSERT INTO `musica` VALUES (1,'/files/musicas/brandao085-deondeeuvenho.m3u8','/files/imagens/issoetrap.jpg','2022-01-20','00:02:40.000000','mp3','/files/letras/brandao085-deondeeuvenho.txt',6,'De Onde Eu Venho',1,4),(2,'/files/musicas/brandao085-sonhos.m3u8','/files/imagens/issoetrap.jpg','2022-01-20','00:03:53.000000','mp3','/files/letras/brandao085-sonhos.txt',5,'Sonhos',1,2),(3,'/files/musicas/wiu-coracaodegelo.m3u8','/files/imagens/manualcomoamarerrado.jpg','2022-11-11','00:02:55.000000','mp3','/files/letras/wiu-coracaodegelo.txt',5,'Coração de Gelo',2,4),(4,'/files/musicas/wiu-flowespacial.m3u8','/files/imagens/manualcomoamarerrado.jpg','2022-11-11','00:03:30.000000','mp3','/files/letras/wiu-flowespacial.txt',7,'Flow Espacial',2,4),(5,'/files/musicas/matue-kennyg.m3u8','/files/imagens/maquinadotempo.jpg','2020-08-28','00:02:40.000000','mp3','/files/letras/matue-kennyg.txt',5,'Kenny G',3,4),(6,'/files/musicas/matue-777666.m3u8','/files/imagens/maquinadotempo.jpg','2020-08-28','00:03:05.000000','mp3','/files/letras/matue-777666.txt',6,'777-666',3,4),(7,'/files/musicas/teto-mustangpreto.m3u8','/files/imagens/previaszip.jpg','2022-12-15','00:02:50.000000','mp3','/files/letras/teto-mustangpreto.txt',5,'Mustang Preto',4,4),(8,'/files/musicas/teto-m4.m3u8','/files/imagens/previaszip.jpg','2022-12-15','00:03:10.000000','mp3','/files/letras/teto-m4.txt',6,'M4 (feat. Matuê)',4,4),(9,'/files/musicas/jahkoy-bitter.m3u8','/files/imagens/jahkoy-bitter.jpg','2022-10-15','00:02:19.000000','mp3','/files/letras/jahkoy-bitter.txt',3,'Bitter',NULL,1);
 /*!40000 ALTER TABLE `musica` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -61,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-02 23:38:19
+-- Dump completed on 2025-07-07 21:09:49

@@ -31,6 +31,10 @@ export class AlbumService {
     return this.httpClient.get<Album[]>(`${this.baseUrl}/getAlbunsByTituloContendo?titulo=${titulo}`);
   }
 
+  getAlbunsByUtilizadorId(idUtilizador: number) {
+    return this.httpClient.get<Album[]>(`${this.baseUrl}/getAlbunsByUtilizadorId?idUtilizador=${idUtilizador}`);
+  }
+
   getAlbumById(id: number) {
     return this.httpClient.get<Album>(`${this.baseUrl}/getAlbumById?id=${id}`);
   }

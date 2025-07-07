@@ -49,7 +49,7 @@ CREATE TABLE `video` (
 
 LOCK TABLES `video` WRITE;
 /*!40000 ALTER TABLE `video` DISABLE KEYS */;
-INSERT INTO `video` VALUES (1,'Francisco Lopes','/files/videos/video1.mp4','2024-12-15','Vídeo oficial lançado por Francisco Lopes','00:03:25.000000','mp4',120,'Vídeo 1',11,NULL,'/files/imagens/video1img.png');
+INSERT INTO `video` VALUES (1,'Francisco Lopes','/files/videos/video1.m3u8','2024-12-15','Vídeo oficial lançado por Francisco Lopes','00:03:25.000000','mp4',120,'Vídeo 1',11,NULL,'/files/imagens/video1img.png');
 /*!40000 ALTER TABLE `video` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -62,4 +62,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-02 23:38:19
+-- Dump completed on 2025-07-07 21:09:48

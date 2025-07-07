@@ -3,7 +3,6 @@ package ao.isptec.multimedia.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-
 @Entity
 public class Critica {
 
@@ -12,7 +11,11 @@ public class Critica {
     private Integer id;
 
     private Integer pontuacao;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT", nullable = true)
     private String comentario;
+
     private LocalDateTime dataCritica;
 
     @ManyToOne
@@ -22,7 +25,6 @@ public class Critica {
     @ManyToOne
     @JoinColumn(name = "idAlbum", nullable = false)
     private Album album;
-    
 
     public Integer getId() {
         return id;

@@ -31,7 +31,7 @@ CREATE TABLE `playlist_musica` (
   KEY `FK7fp43c8kmivsvgh8qf77irln3` (`id_playlist`),
   CONSTRAINT `FK7fp43c8kmivsvgh8qf77irln3` FOREIGN KEY (`id_playlist`) REFERENCES `playlist` (`id`),
   CONSTRAINT `FKgs04k8xdbe3hv1r696vr5muc7` FOREIGN KEY (`id_musica`) REFERENCES `musica` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `playlist_musica` (
 
 LOCK TABLES `playlist_musica` WRITE;
 /*!40000 ALTER TABLE `playlist_musica` DISABLE KEYS */;
+INSERT INTO `playlist_musica` VALUES (5,2,1),(6,3,1),(7,5,1),(8,7,1),(9,1,2),(10,8,2);
 /*!40000 ALTER TABLE `playlist_musica` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-02 23:38:20
+-- Dump completed on 2025-07-07 21:09:48

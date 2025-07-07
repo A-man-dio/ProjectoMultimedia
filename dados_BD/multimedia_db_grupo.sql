@@ -27,6 +27,7 @@ CREATE TABLE `grupo` (
   `data_criacao` date DEFAULT NULL,
   `descricao` varchar(255) DEFAULT NULL,
   `nome` varchar(255) DEFAULT NULL,
+  `publico` bit(1) DEFAULT NULL,
   `id_utilizador` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKevvx4np7hw1gsyhoi8hsxny1x` (`id_utilizador`),
@@ -40,7 +41,7 @@ CREATE TABLE `grupo` (
 
 LOCK TABLES `grupo` WRITE;
 /*!40000 ALTER TABLE `grupo` DISABLE KEYS */;
-INSERT INTO `grupo` VALUES (1,'2025-06-28','Grupo para todos os users','Default (Todos)',2);
+INSERT INTO `grupo` VALUES (1,'2025-06-28','Grupo para todos os users','Default (Todos)',_binary '',2);
 /*!40000 ALTER TABLE `grupo` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-02 23:38:20
+-- Dump completed on 2025-07-07 21:09:50
