@@ -6,6 +6,10 @@ import { ArtistaService } from '../../services/artista.service';
 import { SharedDataService } from '../../services/shared-data.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Musica } from '../../models/Musica';
+import { Video } from '../../models/Video';
+import { MusicaService } from '../../services/musica.service';
+import { VideoService } from '../../services/video.service';
 
 @Component({
   selector: 'app-pagina-inicial-adm',
@@ -17,9 +21,14 @@ export class PaginaInicialAdmComponent {
   constructor(private router: Router) {}
   conjuntoArtistas: Artista[] = [];
   conjuntoAlbuns: Album[] = [];
+  conjuntoMusicas: Musica[] = [];
+  conjuntoVideos: Video[] = [];
   username: string = "";
+
   artistaService = inject(ArtistaService);
   albumService = inject(AlbumService);
+  musicaService = inject(MusicaService);
+  videoService = inject(VideoService);
   sharedDataService = inject(SharedDataService);
 
   ngOnInit() {
@@ -36,6 +45,15 @@ export class PaginaInicialAdmComponent {
     this.albumService.getAllAlbuns().subscribe(albuns => {
       this.conjuntoAlbuns = albuns;
       console.log(this.conjuntoAlbuns);
+    });
+
+    this.musicaService.getAllMusicas().subscribe(musicas => {
+      this.conjuntoMusicas = musicas;
+      console.log(this.conjuntoMusicas);
+    });
+    this.videoService.getAllVideos().subscribe(videos => {
+      this.conjuntoVideos = videos;
+      console.log(this.conjuntoVideos);
     });
   }
   irParaEditarMidia(tipo: string, idMidia: number | null) {

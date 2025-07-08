@@ -17,4 +17,6 @@ public interface MembroGrupoRepository extends JpaRepository<MembroGrupo, Intege
     List<MembroGrupo> findByEstado(Integer estado);
 
     Optional<MembroGrupo> findById(Integer id);
+
+    MembroGrupo findByGrupoIdAndUtilizadorId(Integer idGrupo, Integer idUtilizador);
 }

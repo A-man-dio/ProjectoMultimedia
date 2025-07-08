@@ -55,4 +55,11 @@ public class MembroGrupoController {
         return membroGrupoService.findById(id);
     }
 
+    @GetMapping("/getMembroGrupoByGrupoIdAndUtilizadorId")
+    public MembroGrupo getMembroGrupoByGrupoIdAndUtilizadorId(
+            @RequestParam Integer idGrupo,
+            @RequestParam Integer idUtilizador) {
+        return membroGrupoService.findByGrupoIdAndUtilizadorId(idGrupo, idUtilizador);
+    }
+
 }

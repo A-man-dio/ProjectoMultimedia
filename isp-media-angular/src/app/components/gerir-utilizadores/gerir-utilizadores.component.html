@@ -1,16 +1,39 @@
-<!-- Exemplo: a Sidebar e o Header estão fora. 
-Aqui é só a div principal de gestão -->
-
-<div class="container-utilizadores">
-  <h2>Gestão de Utilizadores</h2>
-
-  <div class="utilizador-item" *ngFor="let u of utilizadores">
-    <div class="info">
-      <p>{{ u.nome }}</p>
+<div class="main-container">
+  <div class="topbar">
+    <div class="prev-next-buttons">
+      <button type="button" (click)="voltar()">Voltar</button>
     </div>
-    <div class="acoes">
-      <button (click)="apagarConta(u)">Apagar conta</button>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Pesquisar utilizador..." />
+      <span class="emoji">🔍︎</span>
+    </div>
+
+    <div class="user-profile">
+      <span class="emoji">👤</span>
+      <span class="username">{{ username }}</span>
     </div>
   </div>
 
+  <div class="container-utilizadores">
+    <h2>Gestão de Utilizadores</h2>
+
+    <div class="utilizador-item" *ngFor="let u of utilizadores">
+      <div class="info">
+        <span class="emoji">👤</span>
+        <div class="details">
+          <h4>{{ u.nome }}</h4>
+          <p>{{ u.email }}</p>
+        </div>
+      </div>
+      <div class="acoes">
+        <button (click)="apagarConta(u)">
+          <span class="fa fa-trash"></span> Apagar conta
+        </button>
+        <button id="edit" class="edit" (click)="apagarConta(u)">
+          <span class="fa fa-shield"></span> Tornar editor público
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

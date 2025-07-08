@@ -1,55 +1,166 @@
 <div class="main-container">
-    <div class="topbar">
-        <div class="prev-next-buttons">
-            <button type="button" (click)="voltar()">Voltar</button>
-        </div>
-        <div class="user-profile">
-            <span class="emoji">👤</span>
-            <span class="username">{{ username }}</span>
-        </div>
+  <div class="topbar">
+    <div class="prev-next-buttons">
+      <button type="button" (click)="voltar()">Voltar</button>
     </div>
-
-    <div class="form-container">
-        <h2 *ngIf="tipo === 'artista'">Editar Artista</h2>
-        <h2 *ngIf="tipo === 'album'">Editar Álbum</h2>
-
-        <form *ngIf="tipo === 'artista'" (ngSubmit)="salvar()">
-            <div class="form-group">
-                <label>Nome</label>
-                <input type="text" [(ngModel)]="artista.nome" name="nome" required>
-            </div>
-            <div class="form-group">
-                <label>Biografia</label>
-                <textarea [(ngModel)]="artista.biografia" name="biografia" required></textarea>
-            </div>
-            <div class="form-group">
-                <label>Foto</label>
-                <input type="file" (change)="onFileSelected($event)">
-                <img *ngIf="artista.caminhoFoto" [src]="'http://localhost:8080' + artista.caminhoFoto"
-                    class="preview-img">
-            </div>
-            <button type="submit">Salvar</button>
-        </form>
-
-        <form *ngIf="tipo === 'album'" (ngSubmit)="salvar()">
-            <div class="form-group">
-                <label>Título</label>
-                <input type="text" [(ngModel)]="album.titulo" name="titulo" required>
-            </div>
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea [(ngModel)]="album.descricao" name="descricao" required></textarea>
-            </div>
-            <div class="form-group">
-                <label>Data de Lançamento</label>
-                <input type="date" [(ngModel)]="album.dataLancamento" name="dataLancamento" required>
-            </div>
-            <div class="form-group">
-                <label>Foto</label>
-                <input type="file" (change)="onFileSelected($event)">
-                <img *ngIf="album.caminhoFoto" [src]="'http://localhost:8080' + album.caminhoFoto" class="preview-img">
-            </div>
-            <button type="submit">Salvar</button>
-        </form>
+    <div class="user-profile">
+      <span class="emoji">👤</span>
+      <span class="username">{{ username }}</span>
     </div>
+  </div>
+
+  <div class="form-container">
+    <h2 *ngIf="tipo === 'artista'">Editar Artista</h2>
+    <h2 *ngIf="tipo === 'album'">Editar Álbum</h2>
+
+    <form *ngIf="tipo === 'artista'" (ngSubmit)="salvar()">
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" [(ngModel)]="artista.nome" name="nome" required />
+      </div>
+      <div class="form-group">
+        <label>Biografia</label>
+        <textarea
+          [(ngModel)]="artista.biografia"
+          name="biografia"
+          required
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label>Foto</label>
+        <input type="file" (change)="onFileSelected($event)" />
+        <img
+          *ngIf="artista.caminhoFoto"
+          [src]="'http://localhost:8080' + artista.caminhoFoto"
+          class="preview-img"
+        />
+      </div>
+      <button type="submit">Salvar</button>
+    </form>
+
+    <form *ngIf="tipo === 'album'" (ngSubmit)="salvar()">
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" [(ngModel)]="album.titulo" name="titulo" required />
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea
+          [(ngModel)]="album.descricao"
+          name="descricao"
+          required
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label>Data de Lançamento</label>
+        <input
+          type="date"
+          [(ngModel)]="album.dataLancamento"
+          name="dataLancamento"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label>Foto</label>
+        <input type="file" (change)="onFileSelected($event)" />
+        <img
+          *ngIf="album.caminhoFoto"
+          [src]="'http://localhost:8080' + album.caminhoFoto"
+          class="preview-img"
+        />
+      </div>
+      <button type="submit">Salvar</button>
+    </form>
+
+    
+    <form *ngIf="tipo === 'musica'" (ngSubmit)="salvar()">
+      <h2>Editar Música</h2>
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" [(ngModel)]="musica.titulo" name="titulo" required />
+      </div>
+      <div class="form-group">
+        <label>Data de Lançamento</label>
+        <input
+          type="date"
+          [(ngModel)]="musica.dataLancamento"
+          name="dataLancamento"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select [(ngModel)]="musica.categoria" name="categoria" required>
+          <option *ngFor="let cat of categorias" [ngValue]="cat">
+            {{ cat.nome }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Álbum</label>
+        <select [(ngModel)]="musica.album" name="album" required>
+          <option *ngFor="let alb of albuns" [ngValue]="alb">
+            {{ alb.titulo }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Foto</label>
+        <input type="file" (change)="onFileSelected($event)" />
+        <img
+          *ngIf="musica.caminhoFoto"
+          [src]="'http://localhost:8080' + musica.caminhoFoto"
+          class="preview-img"
+        />
+      </div>
+      <button type="submit">Salvar</button>
+    </form>
+
+    
+    <form *ngIf="tipo === 'video'" (ngSubmit)="salvar()">
+      <h2>Editar Vídeo</h2>
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" [(ngModel)]="video.titulo" name="titulo" required />
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea
+          [(ngModel)]="video.descricao"
+          name="descricao"
+          required
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label>Autor</label>
+        <input type="text" [(ngModel)]="video.autor" name="autor" required />
+      </div>
+      <div class="form-group">
+        <label>Data de Lançamento</label>
+        <input
+          type="date"
+          [(ngModel)]="video.dataLancamento"
+          name="dataLancamento"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select [(ngModel)]="video.categoria" name="categoria" required>
+          <option *ngFor="let cat of categorias" [ngValue]="cat">
+            {{ cat.nome }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Música</label>
+        <select [(ngModel)]="video.musica" name="musica" required>
+          <option *ngFor="let mus of musicas" [ngValue]="mus">
+            {{ mus.titulo }}
+          </option>
+        </select>
+      </div>
+      <button type="submit">Salvar</button>
+    </form>
+  </div>
 </div>

@@ -123,7 +123,7 @@
                 <div class="item" *ngFor="let artista of conjuntoArtistas">
                     <img [src]="'http://localhost:8080' + artista.caminhoFoto" />
                     <div class="edit" >
-                        <span class="fa fa-pencil" (click)="irParaEditarMidia('artista',artista.id)"></span>
+                        <span class = "fa fa-pencil" (click)="irParaEditarMidia('artista',artista.id)"></span>
                     </div>
                     <div class="play">
                         <span class="fa fa-play"></span>
@@ -157,44 +157,18 @@
 
         <div class="categorias">
             <h2>Músicas</h2>
-            <div class="list">
-                <div class="item">
-                    <img src="https://i.scdn.co/image/ab67616d0000b2733b5e11ca1b063583df9492db" />
+           <div class="list">
+                <div class="item" *ngFor="let musica of conjuntoMusicas">
+                    <img [src]="'http://localhost:8080' + musica.caminhoFoto" />
+                    <div class="edit" >
+                        <span class="fa fa-pencil" (click)="irParaEditarMidia('musica',musica.id)"></span>
+                    </div>
                     <div class="play">
                         <span class="fa fa-play"></span>
                     </div>
-                    <h4>Mood Booster</h4>
-                    <p>Get happy with today's dose of feel-good...</p>
+                    <h4>{{ musica.titulo }}</h4>
+                    <p>{{ musica.categoria }}</p>
                 </div>
-
-                <div class="item">
-                    <img src="https://i.scdn.co/image/ab67616d0000b2733b5e11ca1b063583df9492db" />
-                    
-                    <div class="play">
-                        <span class="fa fa-play"></span>
-                    </div>
-                    <h4>Feelin' Good</h4>
-                    <p>Feel good with this positively timeless...</p>
-                </div>
-
-                <div class="item">
-                    <img src="https://i.scdn.co/image/ab67616d0000b2733b5e11ca1b063583df9492db" />
-                    <div class="play">
-                        <span class="fa fa-play"></span>
-                    </div>
-                    <h4>Feelin' Good</h4>
-                    <p>Feel good with this positively timeless...</p>
-                </div>
-
-                <div class="item">
-                    <img src="https://i.scdn.co/image/ab67616d0000b2733b5e11ca1b063583df9492db" />
-                    <div class="play">
-                        <span class="fa fa-play"></span>
-                    </div>
-                    <h4>Feelin' Good</h4>
-                    <p>Feel good with this positively timeless...</p>
-                </div>
-
 
             </div>
         </div>
@@ -236,6 +210,21 @@
                     </div>
                     <h4>Feel Good Piano</h4>
                     <p>Happy vibes for an upbeat morning.</p>
+                </div>
+
+            </div>
+
+             <div class="list">
+                <div class="item" *ngFor="let video of conjuntoVideos">
+                    <img src="https://i.scdn.co/image/ab67616d0000b2733b5e11ca1b063583df9492db" />
+                    <div class="edit" >
+                        <span class="fa fa-pencil" (click)="irParaEditarMidia('musica',video.id)"></span>
+                    </div>
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                    <h4>{{ video.titulo }}</h4>
+                    <p>{{ video.categoria }}</p>
                 </div>
 
             </div>
