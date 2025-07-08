@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { MusicaArtista } from '../models/MusicaArtista';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -6,4 +8,31 @@ import { Injectable } from '@angular/core';
 export class MusicaArtistaService {
 
   constructor() { }
+
+  private baseUrl = 'http://localhost:8080/MusicaArtista';
+  private httpClient = inject(HttpClient);
+
+  saveMusicaArtista(musicaArtista: MusicaArtista) {
+    return this.httpClient.post<MusicaArtista>(`${this.baseUrl}/save`, musicaArtista);
+  }
+
+  deleteMusicaArtista(musicaArtista: MusicaArtista) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/delete`, { body: musicaArtista });
+  }
+
+  getAllMusicasArtistas() {
+    return this.httpClient.get<MusicaArtista[]>(`${this.baseUrl}/getAll`);
+  }
+
+  getMusicasArtistasByMusicaId(idMusica: number) {
+    return this.httpClient.get<MusicaArtista[]>(`${this.baseUrl}/getMusicasArtistasByMusicaId?idMusica=${idMusica}`);
+  }
+
+  getMusicasArtistasByArtistaId(idArtista: number) {
+    return this.httpClient.get<MusicaArtista[]>(`${this.baseUrl}/getMusicasArtistasByArtistaId?idArtista=${idArtista}`);
+  }
+
+  getMusicaArtistaById(id: number) {
+    return this.httpClient.get<MusicaArtista>(`${this.baseUrl}/getMusicaArtistaById?id=${id}`);
+  }
 }

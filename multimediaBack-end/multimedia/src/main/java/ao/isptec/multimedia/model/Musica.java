@@ -77,14 +77,6 @@ public class Musica {
         this.album = album;
     }
 
-    public String getLetra() {
-        return letra;
-    }
-
-    public void setLetra(String letra) {
-        this.letra = letra;
-    }
-
     public LocalDate getDataLancamento() {
         return dataLancamento;
     }
@@ -109,13 +101,20 @@ public class Musica {
         this.categoria = categoria;
     }
 
-
     public String getCaminhoFoto() {
         return caminhoFoto;
     }
 
     public void setCaminhoFoto(String caminhoFoto) {
         this.caminhoFoto = caminhoFoto;
+    }
+
+    public String getLetra() {
+        return this.letra;
+    }
+
+    public void setLetra(String letra) {
+        this.letra = letra;
     }
 
 }

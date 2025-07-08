@@ -1,7 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Musica } from '../models/Musica';
 import { Video } from '../models/Video';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +9,36 @@ export class VideoService {
 
   constructor() { }
 
-  private readonly baseUrl = 'http://localhost:8080/Video';
+  private baseUrl = 'http://localhost:8080/Video';
   private httpClient = inject(HttpClient);
 
+  saveVideo(video: Video) {
+    return this.httpClient.post<Video>(`${this.baseUrl}/save`, video);
+  }
+
+  deleteVideo(video: Video) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/delete`, { body: video });
+  }
+
   getAllVideos() {
-      return this.httpClient.get<Video[]>(`${this.baseUrl}/getAll`);
-    }
+    return this.httpClient.get<Video[]>(`${this.baseUrl}/getAll`);
+  }
+
+  getVideosByTituloContendo(titulo: string) {
+    return this.httpClient.get<Video[]>(`${this.baseUrl}/getVideosByTituloContendo?titulo=${titulo}`);
+  }
+
+  getVideosByCategoriaId(idCategoria: number) {
+    return this.httpClient.get<Video[]>(`${this.baseUrl}/getVideosByCategoriaId?idCategoria=${idCategoria}`);
+  }
+
+  getVideosByMusicaId(idMusica: number) {
+    return this.httpClient.get<Video[]>(`${this.baseUrl}/getVideosByMusicaId?idMusica=${idMusica}`);
+  }
+
+  getVideoById(id: number) {
+    return this.httpClient.get<Video>(`${this.baseUrl}/getVideoById?id=${id}`);
+  }
+
+
 }

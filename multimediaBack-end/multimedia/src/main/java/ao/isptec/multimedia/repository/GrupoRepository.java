@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface GrupoRepository extends JpaRepository<Grupo, Integer> {
     List<Grupo> findByNomeContainingIgnoreCase(String nome);
     List<Grupo> findByUtilizadorId(Integer idUtilizador);
-     Optional<Grupo> findById(Integer id);
+    Optional<Grupo> findById(Integer id);
 }

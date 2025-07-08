@@ -7,6 +7,10 @@ import { Router, RouterLink } from '@angular/router';
 import { Utilizador } from '../../models/Utilizador';
 import { SharedDataService } from '../../services/shared-data.service';
 import { share } from 'rxjs';
+import { MembroGrupo } from '../../models/MembroGrupo';
+import { GrupoService } from '../../services/grupo.service';
+import { Grupo } from '../../models/Grupo';
+import { MembroGrupoService } from '../../services/membro-grupo.service';
 
 @Component({
   selector: 'app-pagina-login-registo',
@@ -19,6 +23,8 @@ export class PaginaLoginRegistoComponent {
   @ViewChild('container') containerRef!: ElementRef;
   utilizadorService = inject(UtilizadorService);
   sharedDataService = inject(SharedDataService);
+  grupoService = inject(GrupoService);
+  membroGrupoService = inject(MembroGrupoService);
   router = inject(Router);
   toast = inject(ToastrService);
 
@@ -29,9 +35,18 @@ export class PaginaLoginRegistoComponent {
   senha: string = "";
   confirmacaoSenha: string = "";
 
+  grupoPublico!: Grupo;
+
   //login
   usernameLogin: string = "";
   senhaLogin: string = "";
+
+  ngOnInit() {
+
+    this.grupoService.getGrupoById(1).subscribe(grupo => {
+      this.grupoPublico = grupo;
+    });
+  }
 
   goLogin() {
     this.containerRef.nativeElement.classList.remove('active');
@@ -127,7 +142,8 @@ export class PaginaLoginRegistoComponent {
         this.username = "";
         this.senha = "";
         this.confirmacaoSenha = "";
-
+        const membroGrupo = new MembroGrupo(null, 1, 1, this.grupoPublico, res);
+        this.inserirUsuarioNoGrupoPublico(membroGrupo);
       },
       error: (err) => {
         this.toast.error('Erro de rede no cadastro do usuário', 'Erro!', { closeButton: true });
@@ -139,6 +155,22 @@ export class PaginaLoginRegistoComponent {
     });
   }
 
+  inserirUsuarioNoGrupoPublico(membroGrupo: MembroGrupo) {
+
+    this.membroGrupoService.saveMembroGrupo(membroGrupo).subscribe({
+      next: (res) => {
+        //this.toast.success('Usuário inserido no grupo público com sucesso', 'Sucesso!', { closeButton: true });
+      },
+      error: (err) => {
+        this.toast.error('Erro de rede na inserção do usuário no grupo público', 'Erro!', { closeButton: true });
+        console.error('Erro:', err);
+      },
+      complete: () => {
+        console.log('Requisição finalizada com sucesso!');
+      }
+    });
+
+  }
 
   fazerLogin() {
 
@@ -160,8 +192,7 @@ export class PaginaLoginRegistoComponent {
 
         if (res.tipo == 1) {
           this.router.navigate(['/pagina-inicial']);
-        } else if(res.tipo == 2) {
-          this.router.navigate(['/pagina-inicial-adm']);
+        } else {
           this.toast.success('Usuário encontrado', 'Sucesso!', { closeButton: true });
         }
 

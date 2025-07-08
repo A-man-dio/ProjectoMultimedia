@@ -13,11 +13,11 @@ public class Grupo {
     private String nome;
     private String descricao;
     private LocalDate dataCriacao;
+    private Boolean publico;
 
     @ManyToOne
     @JoinColumn(name = "idUtilizador")
     private Utilizador utilizador; // utilizador que criou o grupo
-
 
     public Integer getId() {
         return id;
@@ -57,6 +57,14 @@ public class Grupo {
 
     public void setUtilizador(Utilizador utilizador) {
         this.utilizador = utilizador;
+    }
+
+    public Boolean getPublico() {
+        return publico;
+    }
+
+    public void setPublico(Boolean publico) {
+        this.publico = publico;
     }
 
 }

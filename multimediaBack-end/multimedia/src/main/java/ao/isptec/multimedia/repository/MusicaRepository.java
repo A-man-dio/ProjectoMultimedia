@@ -9,10 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MusicaRepository extends JpaRepository<Musica, Integer> {
     List<Musica> findByTituloContainingIgnoreCase(String titulo);
-
     List<Musica> findByAlbumId(Integer idAlbum);
-
     List<Musica> findByCategoriaId(Integer idCategoria);
-
     Optional<Musica> findById(Integer id);
 }

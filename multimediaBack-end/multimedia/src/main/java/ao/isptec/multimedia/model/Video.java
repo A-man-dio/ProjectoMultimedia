@@ -19,6 +19,7 @@ public class Video {
     private String formato;
     private Integer tamanho;
     private String caminhoFicheiro;
+    private String caminhoFoto;
     private LocalDate dataLancamento;
     private String autor;
 
@@ -27,9 +28,8 @@ public class Video {
     private Categoria categoria;
 
     @ManyToOne
-    @JoinColumn(name = "idMusica") //um vídeo pode ser de uma música
+    @JoinColumn(name = "idMusica") // um vídeo pode ser de uma música
     private Musica musica;
-
 
     public Integer getId() {
         return id;
@@ -85,6 +85,22 @@ public class Video {
 
     public void setCaminhoFicheiro(String caminhoFicheiro) {
         this.caminhoFicheiro = caminhoFicheiro;
+    }
+
+    public String getCaminhoFoto() {
+        return caminhoFoto;
+    }
+
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
+    }
+
+    public Musica getMusica() {
+        return musica;
+    }
+
+    public void setMusica(Musica musica) {
+        this.musica = musica;
     }
 
     public Categoria getCategoria() {

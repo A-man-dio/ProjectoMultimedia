@@ -30,9 +30,7 @@ public class UtilizadorService {
     }
 
     public void delete(Utilizador utilizador) {
-
-        utilizador.setAtivo(0);
-        repository.save(utilizador);
+        repository.delete(utilizador);
     }
 
     public Utilizador findByUserName(String username) {
@@ -45,9 +43,6 @@ public class UtilizadorService {
 
     public Utilizador findByUserNameAndSenha(String username, String senha) {
         Utilizador utilizador = repository.findByUsername(username);
-        if ( utilizador.getTipo() == 2)
-            return utilizador;
-
         if (utilizador != null && passwordEncoder.matches(senha, utilizador.getSenha())) {
             return utilizador;
         }
