@@ -16,4 +16,14 @@ export class UploadService {
       responseType: 'text' 
     });
   }
+
+ uploadLetra(file?: File) {
+  const formData = new FormData();
+  if (file) {
+    formData.append('file', file);
+  }
+  return this.httpClient.post<string>('http://localhost:8080/Upload/letra', formData);
+}
+
+
 }

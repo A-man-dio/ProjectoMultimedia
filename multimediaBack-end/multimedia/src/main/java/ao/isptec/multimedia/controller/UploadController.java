@@ -41,4 +41,29 @@ public class UploadController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar imagem.");
         }
     }
+
+
+    @PostMapping("/letra")
+    public ResponseEntity<String> uploadLetra(@RequestParam(value = "file", required = false) MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.ok(null); // ou "" se preferir string vazia
+        }
+
+        try {
+            String pastaDestino = "C:\\Users\\DELL LATITUDE\\Desktop\\Ernesto\\EINF8\\Multimedia\\PROJECTO EXAME\\Recursos\\letras\\";
+            String nomeArquivo = file.getOriginalFilename();
+            File destino = new File(pastaDestino + nomeArquivo);
+            file.transferTo(destino);
+
+            String caminhoLetra = "/files/letras/" + nomeArquivo;
+
+            return ResponseEntity.ok(caminhoLetra);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 }

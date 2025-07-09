@@ -1529,3 +1529,125 @@ audio {
 .radio-player-controles button:hover {
     transform: scale(1.2);
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1050; // maior que tudo
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.modal {
+  background: #181818;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 400px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+.modal2 {
+  background: #181818;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 400px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  height: 600px;
+  overflow-y: auto;
+}
+
+.modal .close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  cursor: pointer;
+}
+
+.modal input, .modal textarea {
+  width: 100%;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.modal button {
+  background: #1db954;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 95%;
+}
+
+.modal button:hover {
+  background: #1ed760;
+}
+
+.artistas-selecionados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.artista-item {
+  background: #2a2a2a;
+  padding: 0.3rem 0.7rem;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.artista-item:hover {
+  background: #3a3a3a;
+}
+
+.criar-artista-btn {
+  background: transparent;
+  border: 1px solid #1db954;
+  color: #1db954;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.criar-artista-btn:hover {
+  background: #1db954;
+  color: #fff;
+}
+
+.artistas-selecionados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.artista-item {
+  background: #2a2a2a;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+}

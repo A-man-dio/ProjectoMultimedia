@@ -1,0 +1,168 @@
+@startuml
+left to right direction
+!define table(x) class x << (T,#FFAAAA) >>
+hide methods
+hide stereotypes
+
+table(Utilizador) {
+  +id : int PK
+  nome : string
+  username : string
+  email : string
+  senha : string
+  tipo : int
+  dataRegisto : datetime
+  ativo : int
+}
+
+table(Album) {
+  +id : int PK
+  titulo : string
+  descricao : string
+  dataLancamento : date
+  caminhoFoto : string
+}
+
+table(Artista) {
+  +id : int PK
+  nome : string
+  biografia : string
+  caminhoFoto : string
+}
+
+table(AlbumArtista) {
+  +id : int PK
+}
+
+table(Musica) {
+  +id : int PK
+  titulo : string
+  duracao : time
+  formato : string
+  tamanho : int
+  letra : string
+  dataLancamento : date
+  caminhoFicheiro : string
+  caminhoFoto : string
+}
+
+table(MusicaArtista) {
+  +id : int PK
+}
+
+table(Video) {
+  +id : int PK
+  titulo : string
+  descricao : string
+  duracao : time
+  formato : string
+  tamanho : int
+  caminhoFicheiro : string
+  caminhoFoto : string
+  dataLancamento : date
+  autor : string
+}
+
+table(Comentario) {
+  +id : int PK
+  comentario : string
+  dataComentario : datetime
+}
+
+table(Categoria) {
+  +id : int PK
+  nome : string
+  descricao : string
+  tipo : int
+}
+
+table(Grupo) {
+  +id : int PK
+  nome : string
+  descricao : string
+  dataCriacao : date
+  publico : bool
+}
+
+table(MembroGrupo) {
+  +id : int PK
+  papel : int
+  estado : int
+}
+
+table(ConteudoGrupo) {
+  +id : int PK
+}
+
+table(Critica) {
+  +id : int PK
+  pontuacao : int
+  comentario : string
+  dataCritica : datetime
+}
+
+table(MeuCarregado) {
+  +id : int PK
+  vinculoDireto : bool
+}
+
+table(Playlist) {
+  +id : int PK
+  titulo : string
+  privada : bool
+  dataCriacao : date
+}
+
+table(PlaylistMusica) {
+  +id : int PK
+}
+
+table(PrivilegioEditor) {
+  +id : int PK
+}
+
+table(RadioEstacao) {
+  +id : int PK
+  nome : string
+  urlStream : string
+  pais : string
+}
+
+' RELACIONAMENTOS
+
+Utilizador "1" -- "N" Album
+Album "1" -- "N" AlbumArtista
+Artista "1" -- "N" AlbumArtista
+Album "1" -- "N" Musica
+Musica "1" -- "N" MusicaArtista
+Artista "1" -- "N" MusicaArtista
+Musica "1" -- "N" PlaylistMusica
+Playlist "1" -- "N" PlaylistMusica
+Playlist "N" -- "1" Utilizador
+
+Musica "N" -- "0..1" Categoria
+Video "N" -- "0..1" Categoria
+Video "N" -- "0..1" Musica
+
+Video "1" -- "N" Comentario
+Comentario "N" -- "1" Utilizador
+
+Critica "N" -- "1" Album
+Critica "N" -- "1" Utilizador
+
+Grupo "1" -- "N" ConteudoGrupo
+Grupo "1" -- "N" MembroGrupo
+MembroGrupo "N" -- "1" Utilizador
+ConteudoGrupo "N" -- "1" Utilizador
+ConteudoGrupo "N" -- "0..1" Musica
+ConteudoGrupo "N" -- "0..1" Video
+
+MeuCarregado "N" -- "1" Utilizador
+MeuCarregado "N" -- "0..1" Musica
+MeuCarregado "N" -- "0..1" Video
+
+PrivilegioEditor "N" -- "1" Utilizador : Concedente
+PrivilegioEditor "N" -- "1" Utilizador : Beneficiario
+
+Grupo "N" -- "1" Utilizador
+@enduml

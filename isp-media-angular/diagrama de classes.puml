@@ -1,0 +1,167 @@
+@startuml
+left to right direction
+' === ENTIDADES PRINCIPAIS ===
+
+class Utilizador {
+  +Integer id
+  +String nome
+  +String username
+  +String email
+  +String senha
+  +Integer tipo
+  +LocalDateTime dataRegisto
+  +Integer ativo
+}
+
+class Album {
+  +Integer id
+  +String titulo
+  +String descricao
+  +LocalDate dataLancamento
+  +String caminhoFoto
+}
+
+class Artista {
+  +Integer id
+  +String nome
+  +String biografia
+  +String caminhoFoto
+}
+
+class AlbumArtista {
+  +Integer id
+}
+
+class Musica {
+  +Integer id
+  +String titulo
+  +LocalTime duracao
+  +String formato
+  +Integer tamanho
+  +String letra
+  +LocalDate dataLancamento
+  +String caminhoFicheiro
+  +String caminhoFoto
+}
+
+class MusicaArtista {
+  +Integer id
+}
+
+class Categoria {
+  +Integer id
+  +String nome
+  +String descricao
+  +Integer tipo
+}
+
+class Video {
+  +Integer id
+  +String titulo
+  +String descricao
+  +LocalTime duracao
+  +String formato
+  +Integer tamanho
+  +String caminhoFicheiro
+  +String caminhoFoto
+  +LocalDate dataLancamento
+  +String autor
+}
+
+class Playlist {
+  +Integer id
+  +String titulo
+  +Boolean privada
+  +LocalDate dataCriacao
+}
+
+class PlaylistMusica {
+  +Integer id
+}
+
+class Grupo {
+  +Integer id
+  +String nome
+  +String descricao
+  +LocalDate dataCriacao
+  +Boolean publico
+}
+
+class ConteudoGrupo {
+  +Integer id
+}
+
+class MembroGrupo {
+  +Integer id
+  +Integer papel
+  +Integer estado
+}
+
+class MeuCarregado {
+  +Integer id
+  +Boolean vinculoDireto
+}
+
+class Comentario {
+  +Integer id
+  +String comentario
+  +LocalDateTime dataComentario
+}
+
+class Critica {
+  +Integer id
+  +Integer pontuacao
+  +String comentario
+  +LocalDateTime dataCritica
+}
+
+
+
+class RadioEstacao {
+  +Integer id
+  +String nome
+  +String urlStream
+  +String pais
+}
+
+' === RELACIONAMENTOS ===
+
+Utilizador "1" --> "many" Album : cria >
+Album "1" --> "many" AlbumArtista
+Artista "1" --> "many" AlbumArtista
+
+Musica "1" --> "many" MusicaArtista
+Artista "1" --> "many" MusicaArtista
+
+Album "1" --> "many" Musica
+Musica "1" --> "0..1" Categoria
+
+Video "1" --> "0..1" Categoria
+Video "1" --> "0..1" Musica
+
+Playlist "1" --> "many" PlaylistMusica
+Musica "1" --> "many" PlaylistMusica
+
+Utilizador "1" --> "many" Playlist
+
+Utilizador "1" --> "many" Grupo : cria >
+Utilizador "1" --> "many" MembroGrupo
+Grupo "1" --> "many" MembroGrupo
+
+Grupo "1" --> "many" ConteudoGrupo
+ConteudoGrupo --> Musica
+ConteudoGrupo --> Video
+ConteudoGrupo --> Utilizador
+
+Utilizador "1" --> "many" Comentario
+Comentario --> Video
+
+Utilizador "1" --> "many" Critica
+Critica --> Album
+
+
+Utilizador "1" --> "many" MeuCarregado
+MeuCarregado --> Musica
+MeuCarregado --> Video
+
+@enduml

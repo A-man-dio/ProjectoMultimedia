@@ -1,0 +1,33 @@
+@startuml
+
+left to right direction
+
+actor Utilizador
+actor Administrador
+
+rectangle "Sistema de Streaming Multimedia" {
+
+  Utilizador --> (Cadastrar-se)
+  Utilizador --> (Login)
+  Utilizador --> (Criar Álbum)
+  Utilizador --> (Criar Artista)
+  Utilizador --> (Adicionar Música)
+  Utilizador --> (Upload Vídeo)
+  Utilizador --> (Criar Playlist)
+  Utilizador --> (Ouvir Música)
+  Utilizador --> (Assistir Vídeo)
+  Utilizador --> (Comentar Vídeo)
+  Utilizador --> (Fazer Crítica Álbum)
+  Utilizador --> (Criar Grupo)
+  Utilizador --> (Postar Conteúdo no Grupo)
+  Utilizador --> (Conceder Privilégio Editor)
+  Utilizador --> (Editar Playlist)
+  Utilizador --> (Baixar Ficheiro)
+  Utilizador --> (Ouvir Rádio Online)
+
+  Administrador --> (Login)
+  Administrador --> (Editar Conteúdos)
+  Administrador --> (Conceder Privilégio Editor)
+}
+
+@enduml

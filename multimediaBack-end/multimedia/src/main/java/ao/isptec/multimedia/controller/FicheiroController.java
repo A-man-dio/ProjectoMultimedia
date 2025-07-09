@@ -9,13 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.*;
-
 @RestController
 @RequestMapping("/api/ficheiros")
 public class FicheiroController {
 
-    private final String pastaMusicas = "uploads/musicas/";
-    private final String pastaVideos = "uploads/videos/";
+    private final String pastaMusicas = "\\musicas\\";
+    private final String pastaVideos = "\\videos\\";
 
     @PostMapping("/upload")
     public ResponseEntity<String> upload(
@@ -24,11 +23,19 @@ public class FicheiroController {
     ) throws IOException {
         String destino = tipo.equals("video") ? pastaVideos : pastaMusicas;
 
-        Files.createDirectories(Paths.get(destino)); // garante que a pasta existe
-        Path caminho = Paths.get(destino + file.getOriginalFilename());
+        Files.createDirectories(Paths.get(destino)); // garante pasta
+        String pastaDestino = "C:\\Users\\DELL LATITUDE\\Desktop\\Ernesto\\EINF8\\Multimedia\\PROJECTO EXAME\\Recursos"+destino;
+        String nomeArquivo = file.getOriginalFilename();
+        Path caminho = Paths.get(pastaDestino + nomeArquivo);
+
         file.transferTo(caminho);
 
-        return ResponseEntity.ok("Ficheiro guardado com sucesso: " + caminho.toString());
+        // monta o caminho virtual
+        String caminhoVirtual = tipo.equals("video")
+                ? "/files/videos/" + nomeArquivo
+                : "/files/musicas/" + nomeArquivo;
+
+        return ResponseEntity.ok(caminhoVirtual);
     }
 
     @GetMapping("/download/{tipo}/{nome}")

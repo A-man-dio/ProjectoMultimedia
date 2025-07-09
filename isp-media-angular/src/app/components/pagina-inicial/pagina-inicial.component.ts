@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { Artista } from '../../models/Artista';
 import { ArtistaService } from '../../services/artista.service';
 import { CommonModule } from '@angular/common';
@@ -29,16 +37,19 @@ import { PlaylistMusicaService } from '../../services/playlist-musica.service';
 import { PrivilegioEditorService } from '../../services/privilegio-editor.service';
 import { RadioEstacao } from '../../models/RadioEstacao';
 import { RadioEstacaoService } from '../../services/radio-estacao.service';
+import { UploadService } from '../../services/upload.service';
+import { AlbumArtista } from '../../models/AlbumArtista';
+import { FicheiroService } from '../../services/ficheiro-service.service';
+import { MusicaArtista } from '../../models/MusicaArtista';
+import { MusicaService } from '../../services/musica.service';
 
 @Component({
   selector: 'app-pagina-inicial',
   imports: [CommonModule, FormsModule],
   templateUrl: './pagina-inicial.component.html',
-  styleUrl: './pagina-inicial.component.scss'
+  styleUrl: './pagina-inicial.component.scss',
 })
-
 export class PaginaInicialComponent {
-
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   @ViewChild('body') paginaInicial!: ElementRef<HTMLElement>;
@@ -47,6 +58,9 @@ export class PaginaInicialComponent {
   private hlsAudio!: Hls | null;
   private hlsVideo!: Hls | null;
 
+  isModalMusicaAberta: boolean = false;
+  isModalAlbumAberto: boolean = false;
+  isModalArtistaAberta: boolean = false;
   abaSeleccionada: string = 'pagina-inicial';
   isReprodutorFechado: boolean = true;
   isReprodutorMaximizadoFechado: boolean = true;
@@ -57,12 +71,11 @@ export class PaginaInicialComponent {
   isPaginaConteudoGrupoFechado: boolean = true;
   isPaginaPlaylistFechada: boolean = true;
   isPaginaConteudoMidiasCompartilhadasFechado: boolean = true;
-  username?: string = "";
-  letraMusica: string = "";
+  username?: string = '';
+  letraMusica: string = '';
   qtdNoScrollAdicionar: number = 0;
-  pesquisaInput: string = "";
-  audio = new Audio;
-
+  pesquisaInput: string = '';
+  audio = new Audio();
 
   //variáveis
   conjuntoEstacoesRadio: RadioEstacao[] = [];
@@ -74,6 +87,25 @@ export class PaginaInicialComponent {
   conjuntoArtistasAlbuns: Artista[][] = [];
   conjuntoCriadoresPostagemMusicas: Utilizador[] = [];
   conjuntoCriadoresPostagemVideos: Utilizador[] = [];
+
+  novoArtista: Artista = new Artista(null, '', '', '');
+  fotoSelecionada!: File | null;
+
+  novoTitulo: string = '';
+  novaDescricao: string = '';
+  novaDataLancamento: string = '';
+  novaCapa!: File | null;
+  artistasSelecionados: Artista[] = [];
+
+  novoTituloMusica: string = '';
+  novaDataLancamentoMusica: string = '';
+  novaMusicaFile: File | undefined;
+  novaLetraFile: File | null = null;
+
+  novaCapaMusica: File | undefined;
+  novoAlbumSelecionadoMusica: Album | null = null;
+  novaCategoriaSelecionadaMusica: Categoria | null = null;
+  novosArtistasSelecionadosMusica: Artista[] = [];
 
   conjuntoGruposUsuario: Grupo[] = [];
   conjuntoGruposVisiveis: Grupo[] = [];
@@ -89,7 +121,6 @@ export class PaginaInicialComponent {
   conjuntoPlaylistsVisiveis: Playlist[] = [];
   conjuntoPlaylistsSistema: Playlist[] = [];
   conjuntoMusicasPlaylists: Musica[][] = [];
-
 
   //variáveis pesquisa
   conjuntoPesquisa: any[] = [];
@@ -122,21 +153,227 @@ export class PaginaInicialComponent {
   privilegioEditorService = inject(PrivilegioEditorService);
   radioEstacaoService = inject(RadioEstacaoService);
   letraService = inject(LetraService);
+  uploadService = inject(UploadService);
+  musicaService = inject(MusicaService);
+  ficheiroService = inject(FicheiroService);
   toast = inject(ToastrService);
-
 
   ngOnInit() {
     this.username = this.sharedDataService.usuarioLogado?.username;
     this.carregarItens();
   }
 
+  onFileSelected(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      this.fotoSelecionada = event.target.files[0];
+    }
+  }
+
+  adicionarArtistaSelecionado(event: any) {
+    const idArtista = +event.target.value;
+    const artista = this.conjuntoArtistas.find((a) => a.id === idArtista);
+    if (
+      artista &&
+      !this.artistasSelecionados.some((a) => a.id === artista.id)
+    ) {
+      this.artistasSelecionados.push(artista);
+    }
+    event.target.value = ''; // Reset select
+  }
+
+  removerArtistaSelecionado(artista: Artista) {
+    this.artistasSelecionados = this.artistasSelecionados.filter(
+      (a) => a.id !== artista.id
+    );
+  }
+
+  async salvarNovaMusica() {
+    if (!this.novaMusicaFile || !this.novaCapaMusica) {
+      this.toast.warning('Preencha todos os campos obrigatórios!', 'Atenção!');
+      return;
+    }
+
+    try {
+      // Upload da música
+      const caminhoFicheiro: string = await firstValueFrom(
+        this.ficheiroService.uploadFicheiro(this.novaMusicaFile, 'musica')
+      );
+
+      // Upload da letra
+      let caminhoLetra: string | null = null;
+
+      if (this.novaLetraFile) {
+        caminhoLetra = await firstValueFrom(
+          this.uploadService.uploadLetra(this.novaLetraFile)
+        );
+      }
+
+      // Upload da capa da música
+      const formDataCapa = new FormData();
+      formDataCapa.append('file', this.novaCapaMusica);
+      const caminhoCapa: string = await firstValueFrom(
+        this.uploadService.uploadImagem(formDataCapa)
+      );
+
+      // Tentar obter duração (opcional)
+      const audio = new Audio(URL.createObjectURL(this.novaMusicaFile));
+      await new Promise((resolve) => {
+        audio.addEventListener('loadedmetadata', resolve);
+      });
+      const duracao = this.formatarTempoM(audio.duration); // por exemplo: "00:03:45"
+
+      // Monta a música
+      const musica = new Musica(
+        null,
+        this.novoTituloMusica,
+        duracao,
+        this.novaMusicaFile.type.split('/')[1], // formato (ex: "mp3")
+        Math.round(this.novaMusicaFile.size / (1024 * 1024)), // tamanho em MB aproximado
+        caminhoLetra || "",
+        this.novaDataLancamentoMusica,
+        caminhoFicheiro,
+        caminhoCapa,
+        this.novoAlbumSelecionadoMusica, // pode ser null
+        this.novaCategoriaSelecionadaMusica // pode ser null
+      );
+
+      console.log("musica add:" +musica);
+
+      // Salvar no backend
+      const musicaCriada = await firstValueFrom(
+        this.musicaService.createMusica(musica)
+      );
+
+      // Vínculo com artistas
+      for (const artista of this.novosArtistasSelecionadosMusica) {
+        const musicaArtista = new MusicaArtista(null, musicaCriada, artista);
+        await firstValueFrom(
+          this.musicaArtistaService.saveMusicaArtista(musicaArtista)
+        );
+      }
+
+      this.toast.success('Música criada com sucesso!', 'Sucesso!');
+      this.fecharModalAdicionarMusica();
+      this.carregarItens(); // ou método para atualizar a lista de músicas
+
+      // Reset campos
+      this.novoTituloMusica = '';
+      this.novaMusicaFile = null!;
+      this.novaLetraFile = null!;
+      this.novaCapaMusica = null!;
+      this.novaDataLancamentoMusica = '';
+      this.novoAlbumSelecionadoMusica = null;
+      this.novaCategoriaSelecionadaMusica = null;
+      this.novosArtistasSelecionadosMusica = [];
+    } catch (err) {
+      console.error(err);
+      this.toast.error('Erro ao criar música!', 'Erro!');
+    }
+  }
+
+  private formatarTempoM(segundos: number): string {
+    const min = Math.floor(segundos / 60)
+      .toString()
+      .padStart(2, '0');
+    const seg = Math.floor(segundos % 60)
+      .toString()
+      .padStart(2, '0');
+    return `00:${min}:${seg}`;
+  }
+
+  async salvarNovoAlbum() {
+    if (!this.novoTitulo || !this.novaCapa) {
+      this.toast.warning(
+        'Preencha todos os campos e selecione uma capa.',
+        'Atenção!'
+      );
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.novaCapa);
+
+    this.uploadService.uploadImagem(formData).subscribe({
+      next: (caminhoFoto) => {
+        const novoAlbum = new Album(
+          null,
+          this.novoTitulo,
+          this.novaDescricao,
+          this.novaDataLancamento,
+          caminhoFoto,
+          this.sharedDataService.usuarioLogado
+        );
+
+        this.albumService.createAlbum(novoAlbum).subscribe({
+          next: (albumCriado) => {
+            this.artistasSelecionados.forEach((artista) => {
+              const albumArtista = new AlbumArtista(null, albumCriado, artista);
+              this.albumArtistaService
+                .saveAlbumArtista(albumArtista)
+                .subscribe();
+            });
+
+            this.toast.success('Álbum adicionado com sucesso!', 'Sucesso!');
+            this.fecharModalAdicionarAlbum();
+            this.carregarItens();
+          },
+          error: () => {
+            this.toast.error('Erro ao salvar álbum.', 'Erro!');
+          },
+        });
+      },
+      error: () => {
+        this.toast.error('Erro ao fazer upload da capa.', 'Erro!');
+      },
+    });
+  }
+
+  async salvarNovoArtista() {
+    if (!this.fotoSelecionada) {
+      this.toast.warning('Selecione uma foto.', 'Atenção!', {
+        closeButton: true,
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.fotoSelecionada);
+
+    this.uploadService.uploadImagem(formData).subscribe({
+      next: (caminhoFoto) => {
+        this.novoArtista.caminhoFoto = caminhoFoto;
+
+        this.artistaService.createArtista(this.novoArtista).subscribe({
+          next: (artistaCriado) => {
+            this.toast.success('Artista adicionado com sucesso!', 'Sucesso!', {
+              closeButton: true,
+            });
+            this.fecharModalAdicionarArtista();
+            this.carregarItens(); // recarrega lista
+            this.novoArtista = new Artista(null, '', '', '');
+            this.fotoSelecionada = null;
+          },
+          error: () => {
+            this.toast.error('Erro ao salvar artista.', 'Erro!', {
+              closeButton: true,
+            });
+          },
+        });
+      },
+      error: () => {
+        this.toast.error('Erro ao fazer upload da imagem.', 'Erro!', {
+          closeButton: true,
+        });
+      },
+    });
+    this.carregarAlbunsEArtistas();
+  }
 
   getRecursoUrl(caminhoFicheiro: string): string {
     return `http://${window.location.hostname}:8080${caminhoFicheiro}`;
   }
 
   carregarItens(): void {
-
     this.zerarVariaveis();
 
     this.carregarEstacoesRadio();
@@ -147,21 +384,23 @@ export class PaginaInicialComponent {
 
     this.carregarPlaylists();
 
-    this.membroGrupoService.getMembrosGrupoByEstadoAndUtilizadorId(1, this.sharedDataService.usuarioLogado.id!).subscribe({
-      next: membrosGrupo => {
-
-        membrosGrupo.forEach(membroGrupo => {
-          this.conjuntoGruposUsuario.push(membroGrupo.grupo);
-        });
-      },
-      complete: () => {
-        this.carregarUsuariosCompartilharamMidias();
-        this.pegarConteudosDosGruposEmQueUsuarioSeEncontra();
-      }
-    });
-
+    this.membroGrupoService
+      .getMembrosGrupoByEstadoAndUtilizadorId(
+        1,
+        this.sharedDataService.usuarioLogado.id!
+      )
+      .subscribe({
+        next: (membrosGrupo) => {
+          membrosGrupo.forEach((membroGrupo) => {
+            this.conjuntoGruposUsuario.push(membroGrupo.grupo);
+          });
+        },
+        complete: () => {
+          this.carregarUsuariosCompartilharamMidias();
+          this.pegarConteudosDosGruposEmQueUsuarioSeEncontra();
+        },
+      });
   }
-
 
   zerarVariaveis() {
     this.conjuntoArtistas = [];
@@ -200,211 +439,254 @@ export class PaginaInicialComponent {
     this.conjuntoUsuariosCompartilhouMidias = [];
     this.conjuntoMusicasCompartilhadas = [];
     this.conjuntoVideosCompartilhados = [];
-
   }
-
 
   carregarEstacoesRadio() {
-    this.radioEstacaoService.getAllRadioEstacoes().subscribe(radioEstacoes => {
-      this.conjuntoEstacoesRadio = radioEstacoes;
-    });
+    this.radioEstacaoService
+      .getAllRadioEstacoes()
+      .subscribe((radioEstacoes) => {
+        this.conjuntoEstacoesRadio = radioEstacoes;
+      });
   }
 
-
-  getIndexOriginal(elemento: any, tipo: "musica" | "video"): number {
-    return (tipo === "musica") ? this.conjuntoMusicas.findIndex(m => m.id === elemento.id) : this.conjuntoVideos.findIndex(m => m.id === elemento.id);
+  getIndexOriginal(elemento: any, tipo: 'musica' | 'video'): number {
+    return tipo === 'musica'
+      ? this.conjuntoMusicas.findIndex((m) => m.id === elemento.id)
+      : this.conjuntoVideos.findIndex((m) => m.id === elemento.id);
   }
 
-  pegarMusicasVideosDeUmaCategoria(idCategoria: number | null, tipo: "musica"): Musica[];
-  pegarMusicasVideosDeUmaCategoria(idCategoria: number | null, tipo: "video"): Video[];
-  pegarMusicasVideosDeUmaCategoria(idCategoria: number | null, tipo: "musica" | "video"): Musica[] | Video[] {
-    return (tipo === "musica")
-      ? this.conjuntoMusicas.filter(m => m.categoria?.id === idCategoria)
-      : this.conjuntoVideos.filter(v => v.categoria?.id === idCategoria);
+  pegarMusicasVideosDeUmaCategoria(
+    idCategoria: number | null,
+    tipo: 'musica'
+  ): Musica[];
+  pegarMusicasVideosDeUmaCategoria(
+    idCategoria: number | null,
+    tipo: 'video'
+  ): Video[];
+  pegarMusicasVideosDeUmaCategoria(
+    idCategoria: number | null,
+    tipo: 'musica' | 'video'
+  ): Musica[] | Video[] {
+    return tipo === 'musica'
+      ? this.conjuntoMusicas.filter((m) => m.categoria?.id === idCategoria)
+      : this.conjuntoVideos.filter((v) => v.categoria?.id === idCategoria);
   }
 
   async juntarMusicasVideosMeusCarregadosConteudosGrupos() {
-
-    this.conjuntoMeusCarregadosMusicas.forEach(meuCarregado => {
-
-      if (!this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(meuCarregado, "musica")) {
+    this.conjuntoMeusCarregadosMusicas.forEach((meuCarregado) => {
+      if (
+        !this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(
+          meuCarregado,
+          'musica'
+        )
+      ) {
         this.conjuntoMusicas.push(meuCarregado.musica);
-        this.conjuntoArtistasMusicas.push(this.encontrarArtistasMeusCarregadosMusica(meuCarregado.musica, this.conjuntoMeusCarregadosMusicas, this.conjuntoArtistasMeusCarregadosMusicas));
+        this.conjuntoArtistasMusicas.push(
+          this.encontrarArtistasMeusCarregadosMusica(
+            meuCarregado.musica,
+            this.conjuntoMeusCarregadosMusicas,
+            this.conjuntoArtistasMeusCarregadosMusicas
+          )
+        );
         this.conjuntoCriadoresPostagemMusicas.push(meuCarregado.utilizador);
       }
-
     });
-
 
     for (const meusCarregados of this.conjuntoMusicasCompartilhadas) {
       for (const meuCarregado of meusCarregados) {
-        if (!this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(meuCarregado, "musica")) {
+        if (
+          !this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(
+            meuCarregado,
+            'musica'
+          )
+        ) {
           this.conjuntoMusicas.push(meuCarregado.musica);
-          const artistas = await this.pegarArtistasMusicaNaRede(meuCarregado.musica);
+          const artistas = await this.pegarArtistasMusicaNaRede(
+            meuCarregado.musica
+          );
           this.conjuntoArtistasMusicas.push(artistas);
           this.conjuntoCriadoresPostagemMusicas.push(meuCarregado.utilizador);
         }
       }
     }
 
-    this.conjuntoMeusCarregadosVideos.forEach(meuCarregado => {
-
-      if (!this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(meuCarregado, "video")) {
+    this.conjuntoMeusCarregadosVideos.forEach((meuCarregado) => {
+      if (
+        !this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(
+          meuCarregado,
+          'video'
+        )
+      ) {
         this.conjuntoVideos.push(meuCarregado.video);
         this.conjuntoCriadoresPostagemVideos.push(meuCarregado.utilizador);
       }
     });
 
-    this.conjuntoVideosCompartilhados.forEach(meusCarregados => {
-
-      meusCarregados.forEach(meuCarregado => {
-
-        if (!this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(meuCarregado, "video")) {
+    this.conjuntoVideosCompartilhados.forEach((meusCarregados) => {
+      meusCarregados.forEach((meuCarregado) => {
+        if (
+          !this.verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(
+            meuCarregado,
+            'video'
+          )
+        ) {
           this.conjuntoVideos.push(meuCarregado.video);
           this.conjuntoCriadoresPostagemVideos.push(meuCarregado.utilizador);
         }
-
       });
-
     });
-
   }
 
   async pegarArtistasMusicaNaRede(musica: Musica): Promise<Artista[]> {
     const artistasMusicas = await firstValueFrom(
       this.musicaArtistaService.getMusicasArtistasByMusicaId(musica.id!)
     );
-    return artistasMusicas.map(ma => ma.artista);
+    return artistasMusicas.map((ma) => ma.artista);
   }
 
+  verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(
+    meuCarregado: MeuCarregado,
+    tipo: 'musica' | 'video'
+  ): boolean {
+    const conjunto =
+      tipo === 'musica' ? this.conjuntoMusicas : this.conjuntoVideos;
+    const idMidia =
+      tipo === 'musica' ? meuCarregado.musica?.id : meuCarregado.video?.id;
 
-
-  verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(meuCarregado: MeuCarregado, tipo: "musica" | "video"): boolean {
-    const conjunto = (tipo === "musica") ? this.conjuntoMusicas : this.conjuntoVideos;
-    const idMidia = (tipo === "musica") ? meuCarregado.musica?.id : meuCarregado.video?.id;
-
-    return conjunto.some(m => m.id === idMidia);
+    return conjunto.some((m) => m.id === idMidia);
   }
 
   carregarAlbunsEArtistas() {
     //Pegar Artistas
-    this.artistaService.getAllArtistas().subscribe(artistas => {
+    this.artistaService.getAllArtistas().subscribe((artistas) => {
       this.conjuntoArtistas = artistas;
     });
 
     //Pegar álbuns
-    this.albumService.getAllAlbuns().subscribe(albuns => {
+    this.albumService.getAllAlbuns().subscribe((albuns) => {
       this.conjuntoAlbuns = albuns;
     });
   }
 
   carregarUsuariosCompartilharamMidias() {
-    this.privilegioEditorService.getPrivilegiosEditoresByBeneficiarioId(this.sharedDataService.usuarioLogado.id!).subscribe({
-      next: (privilegiosEditores) => {
-        this.conjuntoUsuariosCompartilhouMidias = privilegiosEditores.map(m => m.concedente);
-      },
-      complete: () => {
-        this.pegarMidiasExternasUsuarios();
-      }
-    });
+    this.privilegioEditorService
+      .getPrivilegiosEditoresByBeneficiarioId(
+        this.sharedDataService.usuarioLogado.id!
+      )
+      .subscribe({
+        next: (privilegiosEditores) => {
+          this.conjuntoUsuariosCompartilhouMidias = privilegiosEditores.map(
+            (m) => m.concedente
+          );
+        },
+        complete: () => {
+          this.pegarMidiasExternasUsuarios();
+        },
+      });
   }
 
   pegarMidiasExternasUsuarios() {
-
     this.conjuntoUsuariosCompartilhouMidias.forEach((usuario, i) => {
+      this.meuCarregadoService
+        .getMeusCarregadosByUtilizadorId(usuario.id!)
+        .subscribe((meusCarregados) => {
+          this.conjuntoMusicasCompartilhadas[i] = [];
+          this.conjuntoVideosCompartilhados[i] = [];
 
-      this.meuCarregadoService.getMeusCarregadosByUtilizadorId(usuario.id!).subscribe(meusCarregados => {
-
-        this.conjuntoMusicasCompartilhadas[i] = [];
-        this.conjuntoVideosCompartilhados[i] = [];
-
-        meusCarregados.forEach(meuCarregado => {
-
-          if (meuCarregado.musica != null) {
-            this.conjuntoMusicasCompartilhadas[i].push(meuCarregado);
-          } else {
-            this.conjuntoVideosCompartilhados[i].push(meuCarregado);
-          }
-
+          meusCarregados.forEach((meuCarregado) => {
+            if (meuCarregado.musica != null) {
+              this.conjuntoMusicasCompartilhadas[i].push(meuCarregado);
+            } else {
+              this.conjuntoVideosCompartilhados[i].push(meuCarregado);
+            }
+          });
         });
-      });
     });
   }
 
+  pegarMusicasVideosCompartilhadasDeUmUsuario(
+    usuario: Utilizador,
+    conjuntoUsuariosCompartilhouMidias: Utilizador[],
+    tipo: 'musica' | 'video'
+  ): MeuCarregado[] {
+    const meusCarregadosMusicasVideos =
+      tipo == 'musica'
+        ? this.conjuntoMusicasCompartilhadas
+        : this.conjuntoVideosCompartilhados;
 
-  pegarMusicasVideosCompartilhadasDeUmUsuario(usuario: Utilizador, conjuntoUsuariosCompartilhouMidias: Utilizador[], tipo: "musica" | "video"): MeuCarregado[] {
-
-    const meusCarregadosMusicasVideos = (tipo == "musica") ? this.conjuntoMusicasCompartilhadas : this.conjuntoVideosCompartilhados;
-
-    const index = conjuntoUsuariosCompartilhouMidias.findIndex(m => m.id === usuario.id);
+    const index = conjuntoUsuariosCompartilhouMidias.findIndex(
+      (m) => m.id === usuario.id
+    );
     if (index !== -1) {
       return meusCarregadosMusicasVideos[index];
     }
     return [];
   }
 
-
   carregarPlaylists() {
-
     this.playlistService.getAllPlaylists().subscribe({
       next: (playlists) => {
         this.conjuntoPlaylistsSistema = playlists;
-        this.conjuntoPlaylistsUsuario = playlists.filter(m => m.utilizador.id == this.sharedDataService.usuarioLogado.id);
-        this.conjuntoPlaylistsVisiveis = playlists.filter(m => m.privada == false);
+        this.conjuntoPlaylistsUsuario = playlists.filter(
+          (m) => m.utilizador.id == this.sharedDataService.usuarioLogado.id
+        );
+        this.conjuntoPlaylistsVisiveis = playlists.filter(
+          (m) => m.privada == false
+        );
       },
       complete: () => {
         this.pegarMusicasPlaylists();
-      }
-    }
-    );
+      },
+    });
   }
 
   pegarMusicasPlaylists() {
-
     this.conjuntoPlaylistsSistema.forEach((playlist, i) => {
-
-      this.playlistMusicaService.getPlaylistMusicasByPlaylistId(playlist.id!).subscribe(playlistMusicas => {
-
-        this.conjuntoMusicasPlaylists[i] = [];
-        playlistMusicas.forEach(playlistMusica => this.conjuntoMusicasPlaylists[i].push(playlistMusica.musica));
-      });
+      this.playlistMusicaService
+        .getPlaylistMusicasByPlaylistId(playlist.id!)
+        .subscribe((playlistMusicas) => {
+          this.conjuntoMusicasPlaylists[i] = [];
+          playlistMusicas.forEach((playlistMusica) =>
+            this.conjuntoMusicasPlaylists[i].push(playlistMusica.musica)
+          );
+        });
     });
-
   }
 
   carregarGruposEMembros() {
     this.grupoService.getAllGrupos().subscribe({
       next: (grupos) => {
         this.conjuntoGruposSistema = grupos;
-        this.conjuntoGruposVisiveis = grupos.filter(m => m.publico == true);
+        this.conjuntoGruposVisiveis = grupos.filter((m) => m.publico == true);
       },
       complete: () => {
         this.pegarMembrosGrupos();
-      }
-    }
-
-    );
+      },
+    });
   }
 
   //função que pega os membros de cada grupo do sistema
   pegarMembrosGrupos() {
     this.conjuntoGruposSistema.forEach((grupo, i) => {
-
-      this.membroGrupoService.getMembrosGrupoByGrupoId(grupo.id!).subscribe(membrosGrupos => {
-
-        this.conjuntoUsuariosGrupos[i] = [];
-        membrosGrupos.forEach(membroGrupo => {
-          if (membroGrupo.estado == 1) {
-            this.conjuntoUsuariosGrupos[i].push(membroGrupo);
-          }
+      this.membroGrupoService
+        .getMembrosGrupoByGrupoId(grupo.id!)
+        .subscribe((membrosGrupos) => {
+          this.conjuntoUsuariosGrupos[i] = [];
+          membrosGrupos.forEach((membroGrupo) => {
+            if (membroGrupo.estado == 1) {
+              this.conjuntoUsuariosGrupos[i].push(membroGrupo);
+            }
+          });
         });
-      });
     });
   }
 
-  pegarMembrosGrupoDeUmGrupo(grupo: Grupo, conjuntoGruposSistema: Grupo[], conjuntoUsuariosGrupos: MembroGrupo[][]): MembroGrupo[] {
-
-    const index = conjuntoGruposSistema.findIndex(m => m.id === grupo.id);
+  pegarMembrosGrupoDeUmGrupo(
+    grupo: Grupo,
+    conjuntoGruposSistema: Grupo[],
+    conjuntoUsuariosGrupos: MembroGrupo[][]
+  ): MembroGrupo[] {
+    const index = conjuntoGruposSistema.findIndex((m) => m.id === grupo.id);
     if (index !== -1) {
       return conjuntoUsuariosGrupos[index];
     }
@@ -412,11 +694,10 @@ export class PaginaInicialComponent {
   }
 
   verificarSeUsuarioEstaNoGrupo(idGrupo: number | null): Grupo | undefined {
-    return this.conjuntoGruposUsuario.find(m => m.id == idGrupo);
+    return this.conjuntoGruposUsuario.find((m) => m.id == idGrupo);
   }
 
   async pegarConteudosDosGruposEmQueUsuarioSeEncontra() {
-
     for (const grupoUsuario of this.conjuntoGruposUsuario) {
       await this.pegarConteudosDeUmGrupo(grupoUsuario.id!);
     }
@@ -428,46 +709,64 @@ export class PaginaInicialComponent {
     this.carregarMidiasCarregadas();
   }
 
-
   async pegarConteudosDeUmGrupo(idGrupo: number): Promise<void> {
+    const conteudosGrupos = await firstValueFrom(
+      this.conteudoGrupoService.getConteudosGruposByGrupoId(idGrupo)
+    );
 
-    const conteudosGrupos = await firstValueFrom(this.conteudoGrupoService.getConteudosGruposByGrupoId(idGrupo));
-
-    conteudosGrupos.forEach(conteudoGrupo => {
+    conteudosGrupos.forEach((conteudoGrupo) => {
       if (conteudoGrupo.video == null) {
         this.conjuntoMusicas.push(conteudoGrupo.musica!);
-        this.AdicionarMusicaVideoAoGrupoArray(conteudoGrupo.musica, this.conjuntoMusicasGrupos, idGrupo);
+        this.AdicionarMusicaVideoAoGrupoArray(
+          conteudoGrupo.musica,
+          this.conjuntoMusicasGrupos,
+          idGrupo
+        );
         this.conjuntoCriadoresPostagemMusicas.push(conteudoGrupo.utilizador);
       } else {
         this.conjuntoVideos.push(conteudoGrupo.video!);
-        this.AdicionarMusicaVideoAoGrupoArray(conteudoGrupo.video, this.conjuntoVideosGrupos, idGrupo);
+        this.AdicionarMusicaVideoAoGrupoArray(
+          conteudoGrupo.video,
+          this.conjuntoVideosGrupos,
+          idGrupo
+        );
         this.conjuntoCriadoresPostagemVideos.push(conteudoGrupo.utilizador);
       }
     });
   }
 
-
-  pegarMusicasGrupo(grupo: Grupo, conjuntoGruposUsuario: Grupo[], conjuntoMusicasGrupos: Musica[][]): Musica[] | null {
-
-    const index = conjuntoGruposUsuario.findIndex(a => a.id === grupo.id);
+  pegarMusicasGrupo(
+    grupo: Grupo,
+    conjuntoGruposUsuario: Grupo[],
+    conjuntoMusicasGrupos: Musica[][]
+  ): Musica[] | null {
+    const index = conjuntoGruposUsuario.findIndex((a) => a.id === grupo.id);
     if (index !== -1) {
       return conjuntoMusicasGrupos[index];
     }
     return null;
   }
 
-  pegarMusicasPlaylist(playlist: Playlist, conjuntoPlaylistsSistema: Playlist[], conjuntoMusicasPlaylists: Musica[][]): Musica[] | null {
-
-    const index = conjuntoPlaylistsSistema.findIndex(a => a.id === playlist.id);
+  pegarMusicasPlaylist(
+    playlist: Playlist,
+    conjuntoPlaylistsSistema: Playlist[],
+    conjuntoMusicasPlaylists: Musica[][]
+  ): Musica[] | null {
+    const index = conjuntoPlaylistsSistema.findIndex(
+      (a) => a.id === playlist.id
+    );
     if (index !== -1) {
       return conjuntoMusicasPlaylists[index];
     }
     return null;
   }
 
-  pegarVideosGrupo(grupo: Grupo, conjuntoGruposUsuario: Grupo[], conjuntoVideosGrupos: Video[][]): Video[] | null {
-
-    const index = conjuntoGruposUsuario.findIndex(a => a.id === grupo.id);
+  pegarVideosGrupo(
+    grupo: Grupo,
+    conjuntoGruposUsuario: Grupo[],
+    conjuntoVideosGrupos: Video[][]
+  ): Video[] | null {
+    const index = conjuntoGruposUsuario.findIndex((a) => a.id === grupo.id);
     if (index !== -1) {
       return conjuntoVideosGrupos[index];
     }
@@ -475,79 +774,82 @@ export class PaginaInicialComponent {
   }
 
   carregarMidiasCarregadas() {
-
-    this.meuCarregadoService.getMeusCarregadosByUtilizadorId(this.sharedDataService.usuarioLogado.id!).subscribe({
-      next: meusCarregados => {
-        this.conjuntoMeusCarregadosTotal = meusCarregados;
-        this.conjuntoMeusCarregadosMusicas = meusCarregados.filter(m => m.musica != null);
-        this.conjuntoMeusCarregadosVideos = meusCarregados.filter(m => m.video != null);
-      },
-      complete: () => {
-        this.pegarArtistasMeusCarregadosMusicas();
-      }
-    });
+    this.meuCarregadoService
+      .getMeusCarregadosByUtilizadorId(this.sharedDataService.usuarioLogado.id!)
+      .subscribe({
+        next: (meusCarregados) => {
+          this.conjuntoMeusCarregadosTotal = meusCarregados;
+          this.conjuntoMeusCarregadosMusicas = meusCarregados.filter(
+            (m) => m.musica != null
+          );
+          this.conjuntoMeusCarregadosVideos = meusCarregados.filter(
+            (m) => m.video != null
+          );
+        },
+        complete: () => {
+          this.pegarArtistasMeusCarregadosMusicas();
+        },
+      });
   }
 
   pegarArtistasMeusCarregadosMusicas() {
-
     if (this.conjuntoMeusCarregadosMusicas.length > 0) {
-
-      const observables = this.conjuntoMeusCarregadosMusicas.map((meuCarregado) =>
-        this.musicaArtistaService.getMusicasArtistasByMusicaId(meuCarregado.musica.id!)
+      const observables = this.conjuntoMeusCarregadosMusicas.map(
+        (meuCarregado) =>
+          this.musicaArtistaService.getMusicasArtistasByMusicaId(
+            meuCarregado.musica.id!
+          )
       );
 
-      forkJoin(observables).subscribe(resultados => {
-        this.conjuntoArtistasMeusCarregadosMusicas = resultados.map(musicasArtistas =>
-          musicasArtistas.map(ma => ma.artista)
+      forkJoin(observables).subscribe((resultados) => {
+        this.conjuntoArtistasMeusCarregadosMusicas = resultados.map(
+          (musicasArtistas) => musicasArtistas.map((ma) => ma.artista)
         );
         this.carregarCategoriasJuntarMusicasVideos();
       });
-
     } else {
       this.carregarCategoriasJuntarMusicasVideos();
     }
-
   }
-
 
   carregarCategoriasJuntarMusicasVideos() {
     // ✅ Só aqui depois de tudo pronto
     this.juntarMusicasVideosMeusCarregadosConteudosGrupos();
-    this.pegarCategorias("musica");
-    this.pegarCategorias("video");
+    this.pegarCategorias('musica');
+    this.pegarCategorias('video');
 
-    if (this.abaSeleccionada == "artistas") {
+    if (this.abaSeleccionada == 'artistas') {
       this.conjuntoOriginal = [...this.conjuntoArtistas];
-    } else if (this.abaSeleccionada == "albuns") {
+    } else if (this.abaSeleccionada == 'albuns') {
       this.conjuntoOriginal = [...this.conjuntoAlbuns];
-    } else if (this.abaSeleccionada == "musicas") {
+    } else if (this.abaSeleccionada == 'musicas') {
       this.conjuntoOriginal = [...this.conjuntoMusicas];
-    } else if (this.abaSeleccionada == "videos") {
+    } else if (this.abaSeleccionada == 'videos') {
       this.conjuntoOriginal = [...this.conjuntoVideos];
-    } else if (this.abaSeleccionada == "midiasCarregados") {
+    } else if (this.abaSeleccionada == 'midiasCarregados') {
       this.conjuntoOriginal = [...this.conjuntoMeusCarregadosTotal];
     }
   }
 
-
-
-
-  verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado: MeuCarregado, tipo: "musica" | "video"): Grupo | null {
-
+  verificarSeMidiaFoiCriadaDirectamenteGrupo(
+    meuCarregado: MeuCarregado,
+    tipo: 'musica' | 'video'
+  ): Grupo | null {
     if (meuCarregado.vinculoDireto == true) {
-      return (tipo == "musica") ? this.pegarGrupoDeUmMidia(meuCarregado.musica, 'musica') : this.pegarGrupoDeUmMidia(meuCarregado.video, 'video');
-
+      return tipo == 'musica'
+        ? this.pegarGrupoDeUmMidia(meuCarregado.musica, 'musica')
+        : this.pegarGrupoDeUmMidia(meuCarregado.video, 'video');
     } else {
       return null;
     }
   }
 
-  pegarGrupoDeUmMidia(midia: any, tipo: "musica" | "video"): Grupo | null {
+  pegarGrupoDeUmMidia(midia: any, tipo: 'musica' | 'video'): Grupo | null {
+    const conjunto =
+      tipo == 'musica' ? this.conjuntoMusicasGrupos : this.conjuntoVideosGrupos;
 
-    const conjunto = (tipo == "musica") ? this.conjuntoMusicasGrupos : this.conjuntoVideosGrupos;
-
-    const index = conjunto.findIndex(grupo =>
-      grupo.some(m => m.id === midia.id)
+    const index = conjunto.findIndex((grupo) =>
+      grupo.some((m) => m.id === midia.id)
     );
 
     if (index !== -1) {
@@ -557,9 +859,12 @@ export class PaginaInicialComponent {
     return null;
   }
 
-
-  AdicionarMusicaVideoAoGrupoArray(musicaVideo: any, conjunto: any[][], idGrupo: number) {
-    const index = this.conjuntoGruposUsuario.findIndex(a => a.id === idGrupo);
+  AdicionarMusicaVideoAoGrupoArray(
+    musicaVideo: any,
+    conjunto: any[][],
+    idGrupo: number
+  ) {
+    const index = this.conjuntoGruposUsuario.findIndex((a) => a.id === idGrupo);
     if (index !== -1) {
       if (!conjunto[index]) {
         conjunto[index] = []; // Inicializa se estiver undefined
@@ -568,54 +873,66 @@ export class PaginaInicialComponent {
     }
   }
 
-
   //função que pega os artistas de cada música no grupo público
   pegarArtistasConjuntoMusicas() {
-
     this.conjuntoMusicas.forEach((musica, i) => {
-
-      this.musicaArtistaService.getMusicasArtistasByMusicaId(musica.id!).subscribe(musicasArtistas => {
-
-        this.conjuntoArtistasMusicas[i] = [];
-        musicasArtistas.forEach(musicaArtista => this.conjuntoArtistasMusicas[i].push(musicaArtista.artista));
-      });
-
+      this.musicaArtistaService
+        .getMusicasArtistasByMusicaId(musica.id!)
+        .subscribe((musicasArtistas) => {
+          this.conjuntoArtistasMusicas[i] = [];
+          musicasArtistas.forEach((musicaArtista) =>
+            this.conjuntoArtistasMusicas[i].push(musicaArtista.artista)
+          );
+        });
     });
   }
 
   //função que pega os artistas de cada álbum no grupo público
   pegarArtistasConjuntoAlbuns() {
-
     this.conjuntoAlbuns.forEach((album, i) => {
-
-      this.albumArtistaService.getAlbunsArtistasByAlbumId(album.id!).subscribe(albunsArtistas => {
-        this.conjuntoArtistasAlbuns[i] = [];
-        albunsArtistas.forEach(albumArtista => this.conjuntoArtistasAlbuns[i].push(albumArtista.artista));
-      });
+      this.albumArtistaService
+        .getAlbunsArtistasByAlbumId(album.id!)
+        .subscribe((albunsArtistas) => {
+          this.conjuntoArtistasAlbuns[i] = [];
+          albunsArtistas.forEach((albumArtista) =>
+            this.conjuntoArtistasAlbuns[i].push(albumArtista.artista)
+          );
+        });
     });
   }
 
-  pegarCategorias(tipo: "musica" | "video") {
+  pegarCategorias(tipo: 'musica' | 'video') {
+    console.log('aquiii');
 
-    console.log("aquiii");
-
-    if (tipo == "musica") {
-      this.conjuntoMusicas.forEach(musica => {
-        if (!this.conjuntoCategoriasMusicas.some(c => c.id == musica.categoria?.id)) {
+    if (tipo == 'musica') {
+      this.conjuntoMusicas.forEach((musica) => {
+        if (
+          !this.conjuntoCategoriasMusicas.some(
+            (c) => c.id == musica.categoria?.id
+          )
+        ) {
           this.conjuntoCategoriasMusicas.push(musica.categoria!);
         }
       });
     } else {
-      this.conjuntoVideos.forEach(video => {
-        if (!this.conjuntoCategoriasVideos.some(c => c.id == video.categoria?.id)) {
+      this.conjuntoVideos.forEach((video) => {
+        if (
+          !this.conjuntoCategoriasVideos.some(
+            (c) => c.id == video.categoria?.id
+          )
+        ) {
           this.conjuntoCategoriasVideos.push(video.categoria!);
         }
       });
     }
   }
 
-  pegarArtistasAlbum(album: Album, conjuntoAlbuns: Album[], conjuntoArtistasAlbuns: Artista[][]): Artista[] {
-    const index = conjuntoAlbuns.findIndex(a => a.id === album.id);
+  pegarArtistasAlbum(
+    album: Album,
+    conjuntoAlbuns: Album[],
+    conjuntoArtistasAlbuns: Artista[][]
+  ): Artista[] {
+    const index = conjuntoAlbuns.findIndex((a) => a.id === album.id);
     if (index !== -1) {
       return conjuntoArtistasAlbuns[index];
     }
@@ -623,9 +940,12 @@ export class PaginaInicialComponent {
     return [];
   }
 
-  pegarArtistasMusica(musica: Musica, conjuntoMusicas: Musica[], conjuntoArtistasMusicas: Artista[][]): Artista[] {
-
-    const index = conjuntoMusicas.findIndex(m => m.id === musica.id);
+  pegarArtistasMusica(
+    musica: Musica,
+    conjuntoMusicas: Musica[],
+    conjuntoArtistasMusicas: Artista[][]
+  ): Artista[] {
+    const index = conjuntoMusicas.findIndex((m) => m.id === musica.id);
     if (index !== -1) {
       return conjuntoArtistasMusicas[index];
     }
@@ -633,66 +953,99 @@ export class PaginaInicialComponent {
   }
 
   getMusicasDosMeusCarregados(): Musica[] {
-    return this.conjuntoMeusCarregadosMusicas.map(m => m.musica);
+    return this.conjuntoMeusCarregadosMusicas.map((m) => m.musica);
   }
 
-  verificarExisteMusicaVideoMeusCarregadosEPrivado(meuCarregado: MeuCarregado | null, tipo: "musica" | "video"): boolean {
+  verificarExisteMusicaVideoMeusCarregadosEPrivado(
+    meuCarregado: MeuCarregado | null,
+    tipo: 'musica' | 'video'
+  ): boolean {
     if (!meuCarregado) return false;
 
-    const meuCarregadoEncontrado = (tipo == "musica") ? this.conjuntoMeusCarregadosMusicas.find(m => m.musica.id == meuCarregado.musica.id) : this.conjuntoMeusCarregadosVideos.find(m => m.video.id == meuCarregado.video.id);
+    const meuCarregadoEncontrado =
+      tipo == 'musica'
+        ? this.conjuntoMeusCarregadosMusicas.find(
+            (m) => m.musica.id == meuCarregado.musica.id
+          )
+        : this.conjuntoMeusCarregadosVideos.find(
+            (m) => m.video.id == meuCarregado.video.id
+          );
 
-    return (meuCarregadoEncontrado!.vinculoDireto == false) ? true : false;
-
+    return meuCarregadoEncontrado!.vinculoDireto == false ? true : false;
   }
 
-  getMusicaVideoMeusCarregados(midia: Musica | Video, tipo: "musica" | "video"): MeuCarregado | null {
-    return (tipo == "musica")
-      ? this.conjuntoMeusCarregadosMusicas.find(m => m.musica?.id === midia.id) || null
-      : this.conjuntoMeusCarregadosVideos.find(m => m.video?.id === midia.id) || null;
+  getMusicaVideoMeusCarregados(
+    midia: Musica | Video,
+    tipo: 'musica' | 'video'
+  ): MeuCarregado | null {
+    return tipo == 'musica'
+      ? this.conjuntoMeusCarregadosMusicas.find(
+          (m) => m.musica?.id === midia.id
+        ) || null
+      : this.conjuntoMeusCarregadosVideos.find(
+          (m) => m.video?.id === midia.id
+        ) || null;
   }
 
-
-
-  encontrarArtistasMeusCarregadosMusica(musica: Musica, conjuntoMeusCarregadosMusicas: MeuCarregado[], conjuntoArtistasMeusCarregadosMusicas: Artista[][]): Artista[] {
-
-    const index = conjuntoMeusCarregadosMusicas.findIndex(m => m.musica.id === musica.id);
+  encontrarArtistasMeusCarregadosMusica(
+    musica: Musica,
+    conjuntoMeusCarregadosMusicas: MeuCarregado[],
+    conjuntoArtistasMeusCarregadosMusicas: Artista[][]
+  ): Artista[] {
+    const index = conjuntoMeusCarregadosMusicas.findIndex(
+      (m) => m.musica.id === musica.id
+    );
     if (index !== -1) {
       return conjuntoArtistasMeusCarregadosMusicas[index];
     }
     return [];
   }
 
-
-  pegarAlbunsArtista(artista: Artista, conjuntoAlbuns: Album[], conjuntoArtistasAlbuns: Artista[][]): Album[] {
-    return conjuntoAlbuns.filter(album =>
-      conjuntoArtistasAlbuns[this.conjuntoAlbuns.indexOf(album)]
-        .some(a => a.id === artista.id)
+  pegarAlbunsArtista(
+    artista: Artista,
+    conjuntoAlbuns: Album[],
+    conjuntoArtistasAlbuns: Artista[][]
+  ): Album[] {
+    return conjuntoAlbuns.filter((album) =>
+      conjuntoArtistasAlbuns[this.conjuntoAlbuns.indexOf(album)].some(
+        (a) => a.id === artista.id
+      )
     );
   }
 
-  pegarMusicasArtista(artista: Artista, conjuntoMusicas: Musica[], conjuntoArtistasMusicas: Artista[][]): Musica[] {
+  pegarMusicasArtista(
+    artista: Artista,
+    conjuntoMusicas: Musica[],
+    conjuntoArtistasMusicas: Artista[][]
+  ): Musica[] {
     return conjuntoMusicas.filter((musica, index) =>
-      conjuntoArtistasMusicas[index]
-        .some(a => a.id === artista.id)
+      conjuntoArtistasMusicas[index].some((a) => a.id === artista.id)
     );
   }
 
-  pegarCriadorMusica(musica: Musica, conjuntoMusicas: Musica[], conjuntoCriadoresPostagemMusicas: Utilizador[]): Utilizador {
-    const index = conjuntoMusicas.findIndex(a => a.id === musica.id);
+  pegarCriadorMusica(
+    musica: Musica,
+    conjuntoMusicas: Musica[],
+    conjuntoCriadoresPostagemMusicas: Utilizador[]
+  ): Utilizador {
+    const index = conjuntoMusicas.findIndex((a) => a.id === musica.id);
     if (index !== -1) {
       return conjuntoCriadoresPostagemMusicas[index];
     }
     return null!;
   }
 
-  pegarCriadorVideo(video: Video, conjuntoVideos: Video[], conjuntoCriadoresPostagemVideos: Utilizador[]): Utilizador {
-    const index = conjuntoVideos.findIndex(a => a.id === video.id);
+  pegarCriadorVideo(
+    video: Video,
+    conjuntoVideos: Video[],
+    conjuntoCriadoresPostagemVideos: Utilizador[]
+  ): Utilizador {
+    const index = conjuntoVideos.findIndex((a) => a.id === video.id);
     if (index !== -1) {
       return conjuntoCriadoresPostagemVideos[index];
     }
     return null!;
   }
-
 
   //Funções relacionadas a reprodução de música
   ///_______________________________________________________________
@@ -706,12 +1059,12 @@ export class PaginaInicialComponent {
     }
   }
 
-
   abrirFecharReprodutorMaximizado() {
     this.isReprodutorMaximizadoFechado = !this.isReprodutorMaximizadoFechado;
 
-    this.letraService.carregarLetra(this.sharedDataService.musicaActual.letra)
-      .subscribe(letra => {
+    this.letraService
+      .carregarLetra(this.sharedDataService.musicaActual.letra)
+      .subscribe((letra) => {
         this.letraMusica = letra;
       });
 
@@ -720,7 +1073,6 @@ export class PaginaInicialComponent {
     } else {
       this.removerClasseNoScroll(this.paginaInicial);
     }
-
   }
 
   fecharVisualizacaoReprodutorMaximizado() {
@@ -742,7 +1094,6 @@ export class PaginaInicialComponent {
     this.removerClasseNoScroll(this.paginaInicial);
     this.isPaginaConteudoMidiasCompartilhadasFechado = true;
   }
-
 
   rodarMusica(musica: Musica, artistasMusica: Artista[]) {
     this.isReprodutorFechado = false;
@@ -767,10 +1118,14 @@ export class PaginaInicialComponent {
       // Safari tem suporte nativo
       if (audio.canPlayType('application/vnd.apple.mpegurl')) {
         audio.src = url;
-        audio.addEventListener('loadedmetadata', () => {
-          audio.play();
-          this.sharedDataService.tocando = true;
-        }, { once: true });
+        audio.addEventListener(
+          'loadedmetadata',
+          () => {
+            audio.play();
+            this.sharedDataService.tocando = true;
+          },
+          { once: true }
+        );
       } else if (Hls.isSupported()) {
         this.hlsAudio = new Hls();
         this.hlsAudio.loadSource(url);
@@ -782,46 +1137,45 @@ export class PaginaInicialComponent {
       } else {
         console.error('HLS não suportado no navegador');
       }
-
     }, 0);
-
   }
 
   alternarPlayPause(tipo: 'audio' | 'video') {
-
-    const player = (tipo == "audio") ? this.audioPlayer.nativeElement : this.videoPlayer.nativeElement;
+    const player =
+      tipo == 'audio'
+        ? this.audioPlayer.nativeElement
+        : this.videoPlayer.nativeElement;
 
     if (player.paused) {
       player.play();
 
-      if (tipo == "audio") {
+      if (tipo == 'audio') {
         this.sharedDataService.tocando = true;
         this.sharedDataService.videoTocando = false;
       } else {
         this.sharedDataService.tocando = false;
         this.sharedDataService.videoTocando = true;
       }
-
     } else {
       player.pause();
 
-      if (tipo == "audio") {
+      if (tipo == 'audio') {
         this.sharedDataService.tocando = false;
       } else {
         this.sharedDataService.videoTocando = false;
       }
-
     }
-
   }
 
   atualizarProgresso(tipo: 'audio' | 'video') {
-    const player = (tipo == "audio") ? this.audioPlayer.nativeElement : this.videoPlayer.nativeElement;
+    const player =
+      tipo == 'audio'
+        ? this.audioPlayer.nativeElement
+        : this.videoPlayer.nativeElement;
     const tempo = player.currentTime;
     const dur = player.duration;
     this.sharedDataService.tempoAtual = this.formatarTempo(tempo);
     this.sharedDataService.progressoPercentual = (tempo / dur) * 100;
-
 
     if (player.buffered.length > 0) {
       const bufferedEnd = player.buffered.end(player.buffered.length - 1);
@@ -830,7 +1184,10 @@ export class PaginaInicialComponent {
   }
 
   definirDuracao(tipo: 'audio' | 'video') {
-    const player = (tipo == "audio") ? this.audioPlayer.nativeElement : this.videoPlayer.nativeElement;
+    const player =
+      tipo == 'audio'
+        ? this.audioPlayer.nativeElement
+        : this.videoPlayer.nativeElement;
     const dur = player.duration;
     this.sharedDataService.duracao = this.formatarTempo(dur);
   }
@@ -842,7 +1199,10 @@ export class PaginaInicialComponent {
   }
 
   irParaTempo(event: MouseEvent, tipo: 'audio' | 'video') {
-    const player = (tipo == "audio") ? this.audioPlayer.nativeElement : this.videoPlayer.nativeElement;
+    const player =
+      tipo == 'audio'
+        ? this.audioPlayer.nativeElement
+        : this.videoPlayer.nativeElement;
     const barra = event.currentTarget as HTMLElement;
     const largura = barra.clientWidth;
     const clickX = event.offsetX;
@@ -866,8 +1226,8 @@ export class PaginaInicialComponent {
     this.adicionarClasseNoScroll(this.paginaInicial);
     this.isPaginaAlbumFechado = false;
     this.sharedDataService.albumActual = album;
-    this.sharedDataService.musicasAlbumActual = this.conjuntoMusicas.filter(musica =>
-      musica.album && musica.album.id === album.id
+    this.sharedDataService.musicasAlbumActual = this.conjuntoMusicas.filter(
+      (musica) => musica.album && musica.album.id === album.id
     );
   }
 
@@ -875,24 +1235,40 @@ export class PaginaInicialComponent {
     this.adicionarClasseNoScroll(this.paginaInicial);
     this.isPaginaGrupoFechado = false;
     this.sharedDataService.grupoActual = grupo;
-    this.sharedDataService.utilizadoresGrupoActual = this.pegarMembrosGrupoDeUmGrupo(grupo, this.conjuntoGruposSistema, this.conjuntoUsuariosGrupos);
+    this.sharedDataService.utilizadoresGrupoActual =
+      this.pegarMembrosGrupoDeUmGrupo(
+        grupo,
+        this.conjuntoGruposSistema,
+        this.conjuntoUsuariosGrupos
+      );
   }
 
   abrirVisualizacaoConteudoGrupo(grupo: Grupo) {
     this.adicionarClasseNoScroll(this.paginaInicial);
     this.isPaginaConteudoGrupoFechado = false;
 
-    this.sharedDataService.musicasGrupoActual = this.pegarMusicasGrupo(grupo, this.conjuntoGruposUsuario, this.conjuntoMusicasGrupos)!;
+    this.sharedDataService.musicasGrupoActual = this.pegarMusicasGrupo(
+      grupo,
+      this.conjuntoGruposUsuario,
+      this.conjuntoMusicasGrupos
+    )!;
 
-    this.sharedDataService.videosGrupoActual = this.pegarVideosGrupo(grupo, this.conjuntoGruposUsuario, this.conjuntoVideosGrupos)!;
-
+    this.sharedDataService.videosGrupoActual = this.pegarVideosGrupo(
+      grupo,
+      this.conjuntoGruposUsuario,
+      this.conjuntoVideosGrupos
+    )!;
   }
 
   abrirVisualizacaoPlaylist(playlist: Playlist) {
     this.adicionarClasseNoScroll(this.paginaInicial);
     this.isPaginaPlaylistFechada = false;
     this.sharedDataService.playlistActual = playlist;
-    this.sharedDataService.musicasPlaylistActual = this.pegarMusicasPlaylist(playlist, this.conjuntoPlaylistsSistema, this.conjuntoMusicasPlaylists)!;
+    this.sharedDataService.musicasPlaylistActual = this.pegarMusicasPlaylist(
+      playlist,
+      this.conjuntoPlaylistsSistema,
+      this.conjuntoMusicasPlaylists
+    )!;
   }
 
   abrirVisualizacaoMidiasCompartilhadasPor(usuario: Utilizador) {
@@ -900,9 +1276,19 @@ export class PaginaInicialComponent {
     this.isPaginaConteudoMidiasCompartilhadasFechado = false;
     this.sharedDataService.utilizadorActual = usuario;
 
-    this.sharedDataService.musicasCompartilhadas = this.pegarMusicasVideosCompartilhadasDeUmUsuario(usuario, this.conjuntoUsuariosCompartilhouMidias, "musica");
+    this.sharedDataService.musicasCompartilhadas =
+      this.pegarMusicasVideosCompartilhadasDeUmUsuario(
+        usuario,
+        this.conjuntoUsuariosCompartilhouMidias,
+        'musica'
+      );
 
-    this.sharedDataService.videosCompartilhados = this.pegarMusicasVideosCompartilhadasDeUmUsuario(usuario, this.conjuntoUsuariosCompartilhouMidias, "video");
+    this.sharedDataService.videosCompartilhados =
+      this.pegarMusicasVideosCompartilhadasDeUmUsuario(
+        usuario,
+        this.conjuntoUsuariosCompartilhouMidias,
+        'video'
+      );
   }
 
   fecharVisualizacaoAlbum() {
@@ -920,18 +1306,16 @@ export class PaginaInicialComponent {
     this.isPaginaArtistaFechado = true;
   }
 
-
-
   adicionarClasseNoScroll(elemento: ElementRef<HTMLElement>) {
-    elemento.nativeElement.classList.add("no-scroll");
+    elemento.nativeElement.classList.add('no-scroll');
     this.qtdNoScrollAdicionar++;
   }
 
   removerClasseNoScroll(elemento: ElementRef<HTMLElement>) {
-    elemento.nativeElement.classList.remove("no-scroll");
+    elemento.nativeElement.classList.remove('no-scroll');
     this.qtdNoScrollAdicionar--;
     for (let i = 0; i < this.qtdNoScrollAdicionar; i++) {
-      elemento.nativeElement.classList.add("no-scroll");
+      elemento.nativeElement.classList.add('no-scroll');
     }
   }
 
@@ -941,12 +1325,10 @@ export class PaginaInicialComponent {
     this.sharedDataService.artistaActual = artista;
   }
 
-
   rodarVideo(video: Video) {
     this.adicionarClasseNoScroll(this.paginaInicial);
     this.isPaginaVideoFechado = false;
     this.sharedDataService.videoActual = video;
-
 
     setTimeout(() => {
       const videoPlayer = this.videoPlayer.nativeElement;
@@ -965,10 +1347,14 @@ export class PaginaInicialComponent {
       // Safari tem suporte nativo
       if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
         videoPlayer.src = url;
-        videoPlayer.addEventListener('loadedmetadata', () => {
-          videoPlayer.play();
-          this.sharedDataService.videoTocando = true;
-        }, { once: true });
+        videoPlayer.addEventListener(
+          'loadedmetadata',
+          () => {
+            videoPlayer.play();
+            this.sharedDataService.videoTocando = true;
+          },
+          { once: true }
+        );
       } else if (Hls.isSupported()) {
         this.hlsVideo = new Hls();
         this.hlsVideo.loadSource(url);
@@ -1008,137 +1394,140 @@ export class PaginaInicialComponent {
     this.qtdNoScrollAdicionar = 0;
   }
 
-
-
-
-
-
-
   irTelaArtistas() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'artistas';
     this.carregarItens();
   }
 
-
   irPaginaInicial() {
     this.zerarVariaveis();
     this.abaSeleccionada = 'pagina-inicial';
-    this.barraPesquisa.nativeElement.classList.add("non-active");
+    this.barraPesquisa.nativeElement.classList.add('non-active');
     this.carregarItens();
     this.fecharVisualizacoes();
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
   }
 
   irTelaAlbuns() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'albuns';
     this.carregarItens();
   }
 
   irTelaMusicas() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'musicas';
     this.carregarItens();
   }
 
   irTelaVideos() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'videos';
     this.carregarItens();
   }
 
   irTelaMidiasCarregados() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'midiasCarregados';
     this.carregarItens();
   }
 
   irTelaGrupos() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'grupos';
     this.carregarItens();
   }
 
   irTelaPlaylists() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'playlists';
     this.carregarItens();
   }
 
   irTelaMidiasExternas() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'midiasExternas';
     this.carregarItens();
   }
 
   irTelaEstacoesRadio() {
-    this.pesquisaInput = "";
+    this.pesquisaInput = '';
     this.fecharVisualizacoes();
-    this.barraPesquisa.nativeElement.classList.remove("non-active");
+    this.barraPesquisa.nativeElement.classList.remove('non-active');
     this.zerarVariaveis();
     this.abaSeleccionada = 'estacoesRadio';
     this.carregarItens();
   }
 
   efectuarPesquisa() {
-
-    let termo = "";
+    let termo = '';
     let termoNome = 0;
 
     if (this.abaSeleccionada == 'albuns') {
-      termo = "album";
+      termo = 'album';
       termoNome = 2;
     } else if (this.abaSeleccionada == 'artistas') {
-      termo = "artista";
+      termo = 'artista';
       termoNome = 1;
     } else if (this.abaSeleccionada == 'musicas') {
-      termo = "musica";
+      termo = 'musica';
       termoNome = 2;
     } else if (this.abaSeleccionada == 'videos') {
-      termo = "video";
+      termo = 'video';
       termoNome = 2;
     } else if (this.abaSeleccionada == 'midiasCarregados') {
-      termo = "mídia";
+      termo = 'mídia';
       termoNome = 3;
     }
 
-    if (this.pesquisaInput == "") {
-      this.toast.warning('Por favor digite um(a) ' + termo + ' para pesquisar', 'Atenção!', { closeButton: true });
+    if (this.pesquisaInput == '') {
+      this.toast.warning(
+        'Por favor digite um(a) ' + termo + ' para pesquisar',
+        'Atenção!',
+        { closeButton: true }
+      );
       return;
     }
 
     const pesquisa = this.pesquisaInput.toLowerCase().trim();
 
     if (termoNome != 3) {
-      this.conjuntoPesquisa = this.conjuntoOriginal.filter(elemento =>
-        (termoNome == 1) ? elemento.nome?.toLowerCase().trim().includes(pesquisa) : elemento.titulo?.toLowerCase().trim().includes(pesquisa));
+      this.conjuntoPesquisa = this.conjuntoOriginal.filter((elemento) =>
+        termoNome == 1
+          ? elemento.nome?.toLowerCase().trim().includes(pesquisa)
+          : elemento.titulo?.toLowerCase().trim().includes(pesquisa)
+      );
     } else {
-      this.conjuntoPesquisa = this.conjuntoOriginal.filter(elemento => (elemento.musica != null) ? elemento.musica.titulo?.toLowerCase().trim().includes(pesquisa) : elemento.video.titulo?.toLowerCase().trim().includes(pesquisa));
+      this.conjuntoPesquisa = this.conjuntoOriginal.filter((elemento) =>
+        elemento.musica != null
+          ? elemento.musica.titulo?.toLowerCase().trim().includes(pesquisa)
+          : elemento.video.titulo?.toLowerCase().trim().includes(pesquisa)
+      );
     }
 
     if (this.abaSeleccionada == 'albuns') {
@@ -1150,12 +1539,14 @@ export class PaginaInicialComponent {
     } else if (this.abaSeleccionada == 'videos') {
       this.conjuntoVideos = [...this.conjuntoPesquisa];
     } else if (this.abaSeleccionada == 'midiasCarregados') {
-      this.conjuntoMeusCarregadosMusicas = [...(this.conjuntoPesquisa.filter(m => m.musica != null))];
-      this.conjuntoMeusCarregadosVideos = [...(this.conjuntoPesquisa.filter(m => m.video != null))];
+      this.conjuntoMeusCarregadosMusicas = [
+        ...this.conjuntoPesquisa.filter((m) => m.musica != null),
+      ];
+      this.conjuntoMeusCarregadosVideos = [
+        ...this.conjuntoPesquisa.filter((m) => m.video != null),
+      ];
     }
-
   }
-
 
   tocarEstacao(estacao: RadioEstacao) {
     this.sharedDataService.estacaoRadioActual = estacao;
@@ -1180,5 +1571,91 @@ export class PaginaInicialComponent {
     this.sharedDataService.radioTocando = false;
   }
 
+  abrirModalAdicionarArtista() {
+    this.isModalArtistaAberta = true;
+    this.adicionarClasseNoScroll(this.paginaInicial);
+  }
 
+  fecharModalAdicionarArtista() {
+    this.isModalArtistaAberta = false;
+    this.removerClasseNoScroll(this.paginaInicial);
+  }
+
+  abrirModalAdicionarAlbum() {
+    this.isModalAlbumAberto = true;
+    this.adicionarClasseNoScroll(this.paginaInicial);
+  }
+
+  onCapaSelecionada(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      this.novaCapa = event.target.files[0];
+    }
+  }
+
+  fecharModalAdicionarAlbum() {
+    this.isModalAlbumAberto = false;
+    this.removerClasseNoScroll(this.paginaInicial);
+    this.novoTitulo = '';
+    this.novaDescricao = '';
+    this.novaDataLancamento = '';
+    this.novaCapa = null;
+    this.artistasSelecionados = [];
+  }
+
+  abrirModalAdicionarMusica() {
+    this.adicionarClasseNoScroll(this.paginaInicial);
+    this.isModalMusicaAberta = true;
+  }
+
+  fecharModalAdicionarMusica() {
+    this.removerClasseNoScroll(this.paginaInicial);
+    this.isModalMusicaAberta = false;
+  }
+
+  onMusicaSelecionada(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      this.novaMusicaFile = event.target.files[0];
+    }
+  }
+
+  onLetraSelecionada(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      this.novaLetraFile = event.target.files[0];
+    }
+  }
+
+  onCapaMusicaSelecionada(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      this.novaCapaMusica = event.target.files[0];
+    }
+  }
+  adicionarArtistaMusica(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const artistaSelecionadoId = Number(select.value);
+
+    if (!artistaSelecionadoId) {
+      return;
+    }
+
+    const artistaSelecionado = this.conjuntoArtistas.find(
+      (a) => a.id === artistaSelecionadoId
+    );
+
+    if (
+      artistaSelecionado &&
+      !this.novosArtistasSelecionadosMusica.some(
+        (a) => a.id === artistaSelecionado.id
+      )
+    ) {
+      this.novosArtistasSelecionadosMusica.push(artistaSelecionado);
+    }
+
+    // Limpa seleção para permitir selecionar novamente
+    select.selectedIndex = 0;
+  }
+
+  removerArtistaMusica(artista: Artista) {
+    this.novosArtistasSelecionadosMusica =
+      this.novosArtistasSelecionadosMusica.filter((a) => a.id !== artista.id);
+  }
 }
