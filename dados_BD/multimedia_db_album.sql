@@ -32,7 +32,7 @@ CREATE TABLE `album` (
   PRIMARY KEY (`id`),
   KEY `FKdgfnm4416gotnn9svrdx5qkwt` (`id_utilizador`),
   CONSTRAINT `FKdgfnm4416gotnn9svrdx5qkwt` FOREIGN KEY (`id_utilizador`) REFERENCES `utilizador` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `album` (
 
 LOCK TABLES `album` WRITE;
 /*!40000 ALTER TABLE `album` DISABLE KEYS */;
-INSERT INTO `album` VALUES (1,'/files/imagens/issoetrap.jpg','2022-01-20','Álbum do brandao085 com batidas fortes e letras marcantes','Isso é Trap',2),(2,'/files/imagens/manualcomoamarerrado.jpg','2022-11-11','Sucesso do Wiu','Manual de Como Amar Errado',2),(3,'/files/imagens/maquinadotempo.jpg','2020-08-28','Primeiro álbum do Matuê','Máquina do Tempo',2),(4,'/files/imagens/previaszip.jpg','2022-12-15','Mixtape do Teto com vários hits','Previas.zip',2);
+INSERT INTO `album` VALUES (1,'/files/imagens/issoetrap.jpg','2022-01-20','Álbum do brandao085 com batidas fortes e letras marcantes','Isso é Trap',2),(2,'/files/imagens/manualcomoamarerrado.jpg','2022-11-11','Sucesso do Wiu','Manual de Como Amar Errado',2),(3,'/files/imagens/maquinadotempo.jpg','2020-08-28','Primeiro álbum do Matuê','Máquina do Tempo',2),(4,'/files/imagens/previaszip.jpg','2022-12-15','Mixtape do Teto com vários hits','Previas.zip',2),(5,'/files/imagens/sza-sos_62db47e5-84ca-4f66-8b0a-95676dd280bb.jpg','2025-07-24','Álbum Relaxante','SOS',1);
 /*!40000 ALTER TABLE `album` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:50
+-- Dump completed on 2025-07-14  5:25:01

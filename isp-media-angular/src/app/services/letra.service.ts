@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,9 @@ export class LetraService {
 
   constructor() { }
 
-  private baseUrl = `http://${window.location.hostname}:8080`;
+
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080`;
   private http = inject(HttpClient);
 
 

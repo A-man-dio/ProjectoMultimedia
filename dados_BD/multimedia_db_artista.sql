@@ -28,7 +28,7 @@ CREATE TABLE `artista` (
   `caminho_foto` varchar(255) DEFAULT NULL,
   `nome` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `artista` (
 
 LOCK TABLES `artista` WRITE;
 /*!40000 ALTER TABLE `artista` DISABLE KEYS */;
-INSERT INTO `artista` VALUES (1,'Artista brasileiro de música urbana.','/files/imagens/brandaoimg.webp','Brandão085'),(2,'Artista brasileiro de música urbana.','/files/imagens/wiuimg.jpg','Wiu'),(3,'Rapper brasileiro conhecido pelo trap e autotune.','/files/imagens/matueimg.webp','Matuê'),(4,'Cantor do selo 30PRAUM, destaque no trap nacional.','/files/imagens/tetoimg.jpg','Teto'),(5,'Cantor e compositor canadense de R&B e música eletrônica. ','/files/imagens/jahkoy.jpg','Jahkoy');
+INSERT INTO `artista` VALUES (1,'Artista brasileiro de música urbana.','/files/imagens/brandaoimg.webp','Brandão085'),(2,'Artista brasileiro de música urbana.','/files/imagens/wiuimg.jpg','Wiu'),(3,'Rapper brasileiro conhecido pelo trap e autotune.','/files/imagens/matueimg.webp','Matuê'),(4,'Cantor do selo 30PRAUM, destaque no trap nacional.','/files/imagens/tetoimg.jpg','Teto'),(5,'Cantor e compositor canadense de R&B e música eletrônica. ','/files/imagens/jahkoy.jpg','Jahkoy'),(7,'SZA','/files/imagens/szaArtista.webp','SZA'),(10,'Artista Rap - Norte Americano','/files/imagens/toryimg_13fa95ac-37ca-4423-8009-9e2017ddcd3c.jpg','Tory Lanez'),(11,'Cantor Brasileiro','/files/imagens/veighimg_cdf93dd4-9125-4cda-9d16-2b32d0300c07.jfif','Veigh');
 /*!40000 ALTER TABLE `artista` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:49
+-- Dump completed on 2025-07-14  5:25:00

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { PlaylistMusica } from '../models/PlaylistMusica';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,8 @@ export class PlaylistMusicaService {
 
   constructor() { }
 
-
-  private baseUrl = 'http://localhost:8080/PlaylistMusica';
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/PlaylistMusica`;
   private httpClient = inject(HttpClient);
 
   createPlaylistMusica(playlistMusica: PlaylistMusica) {

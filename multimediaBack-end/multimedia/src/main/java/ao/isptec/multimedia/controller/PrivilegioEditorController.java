@@ -25,6 +25,11 @@ public class PrivilegioEditorController {
         service.delete(privilegioEditor);
     }
 
+    @DeleteMapping("/deleteByConcedenteAndBeneficiario")
+    public void deleteByConcedenteAndBeneficiario(@RequestParam Integer concedenteId, @RequestParam Integer beneficiarioId) {
+        service.deleteByConcedenteIdAndBeneficiarioId(concedenteId, beneficiarioId);
+    }
+
     @GetMapping("/getAll")
     public List<PrivilegioEditor> getAllPrivilegiosEditores() {
         return service.getAllPrivilegiosEditores();

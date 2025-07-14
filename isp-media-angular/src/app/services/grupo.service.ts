@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Grupo } from '../models/Grupo';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class GrupoService {
 
   constructor() { }
 
-  private baseUrl = 'http://localhost:8080/Grupo';
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Grupo`;
   private httpClient = inject(HttpClient);
 
   saveGrupo(grupo: Grupo) {
@@ -35,4 +37,5 @@ export class GrupoService {
   getGrupoById(id: number) {
     return this.httpClient.get<Grupo>(`${this.baseUrl}/getGrupoById?id=${id}`);
   }
+
 }

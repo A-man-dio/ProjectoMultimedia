@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Album } from '../models/Album';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class AlbumService {
 
   constructor() { }
 
-  private baseUrl = "http://localhost:8080/Album";
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Album`;
   private httpClient = inject(HttpClient);
 
   createAlbum(album: Album) {

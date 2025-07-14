@@ -32,7 +32,7 @@ CREATE TABLE `grupo` (
   PRIMARY KEY (`id`),
   KEY `FKevvx4np7hw1gsyhoi8hsxny1x` (`id_utilizador`),
   CONSTRAINT `FKevvx4np7hw1gsyhoi8hsxny1x` FOREIGN KEY (`id_utilizador`) REFERENCES `utilizador` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `grupo` (
 
 LOCK TABLES `grupo` WRITE;
 /*!40000 ALTER TABLE `grupo` DISABLE KEYS */;
-INSERT INTO `grupo` VALUES (1,'2025-06-28','Grupo para todos os users','Default (Todos)',_binary '',2);
+INSERT INTO `grupo` VALUES (1,'2025-06-28','Grupo para todos os users','Default (Todos)',_binary '',2),(4,'2025-07-12','Músicas Relaxantes','Grupo Relaxante',_binary '\0',4),(5,'2025-07-12','Aloha','Grupo Aberto ISPTEC',_binary '',4),(6,'2025-07-14','jdhdhh','Grupo EME',_binary '\0',5);
 /*!40000 ALTER TABLE `grupo` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:50
+-- Dump completed on 2025-07-14  5:25:01

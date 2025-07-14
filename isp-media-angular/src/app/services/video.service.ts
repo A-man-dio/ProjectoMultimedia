@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Video } from '../models/Video';
 import { HttpClient } from '@angular/common/http';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class VideoService {
 
   constructor() { }
 
-  private baseUrl = 'http://localhost:8080/Video';
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Video`;
   private httpClient = inject(HttpClient);
 
   saveVideo(video: Video) {

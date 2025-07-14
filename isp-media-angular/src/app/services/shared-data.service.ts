@@ -15,6 +15,7 @@ import { RadioEstacao } from '../models/RadioEstacao';
 })
 export class SharedDataService {
 
+  public readonly ipServidor = "192.168.1.9";
   private _usuarioLogado!: Utilizador;
 
   //Música Actual e Dados
@@ -41,6 +42,8 @@ export class SharedDataService {
   //Grupo
   private _grupoActual!: Grupo;
   private _utilizadoresGrupoActual!: MembroGrupo[];
+  private _utilizadoresPendentesGrupoActual!: MembroGrupo[];
+  private _utilizadoresNaoEstaoGrupoActual!: Utilizador[];
 
   //conteudo do Grupo
   private _musicasGrupoActual!: Musica[];
@@ -63,6 +66,14 @@ export class SharedDataService {
   private _estacaoRadioActual!: RadioEstacao;
   private _radioTocando!: boolean;
 
+  //Edição
+  private _musicaActualEditarMusica!: Musica;
+
+  //Partilha de Conteúdo:
+  private _tipoConteudoPartilhaGrupo!: "musica" | "video";
+  private _musicaActualPartilhaGrupo!: Musica;
+  private _videoActualPartilhaGrupo!: Video;
+
   get usuarioLogado(): Utilizador {
     return this._usuarioLogado;
   }
@@ -73,6 +84,54 @@ export class SharedDataService {
 
   public set utilizadorActual(value: Utilizador) {
     this._utilizadorActual = value;
+  }
+
+  public get utilizadoresNaoEstaoGrupoActual(): Utilizador[] {
+    return this._utilizadoresNaoEstaoGrupoActual;
+  }
+
+  public set utilizadoresNaoEstaoGrupoActual(value: Utilizador[]) {
+    this._utilizadoresNaoEstaoGrupoActual = value;
+  }
+
+  public get utilizadoresPendentesGrupoActual(): MembroGrupo[] {
+    return this._utilizadoresPendentesGrupoActual;
+  }
+
+  public set utilizadoresPendentesGrupoActual(value: MembroGrupo[]) {
+    this._utilizadoresPendentesGrupoActual = value;
+  }
+
+  public get tipoConteudoPartilhaGrupo(): "musica" | "video" {
+    return this._tipoConteudoPartilhaGrupo;
+  }
+
+  public set tipoConteudoPartilhaGrupo(value: "musica" | "video") {
+    this._tipoConteudoPartilhaGrupo = value;
+  }
+
+  public get musicaActualPartilhaGrupo(): Musica {
+    return this._musicaActualPartilhaGrupo;
+  }
+
+  public set musicaActualPartilhaGrupo(value: Musica) {
+    this._musicaActualPartilhaGrupo = value;
+  }
+
+  public get videoActualPartilhaGrupo(): Video {
+    return this._videoActualPartilhaGrupo;
+  }
+
+  public set videoActualPartilhaGrupo(value: Video) {
+    this._videoActualPartilhaGrupo = value;
+  }
+
+  public get musicaActualEditarMusica(): Musica {
+    return this._musicaActualEditarMusica;
+  }
+
+  public set musicaActualEditarMusica(value: Musica) {
+    this._musicaActualEditarMusica = value;
   }
 
   public get estacaoRadioActual(): RadioEstacao {

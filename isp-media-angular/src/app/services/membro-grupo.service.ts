@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { MembroGrupo } from '../models/MembroGrupo';
 import { HttpClient } from '@angular/common/http';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MembroGrupoService {
 
-
   constructor() { }
 
-  private baseUrl = 'http://localhost:8080/MembroGrupo';
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/MembroGrupo`;
   private httpClient = inject(HttpClient);
 
   saveMembroGrupo(membroGrupo: MembroGrupo) {

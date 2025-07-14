@@ -37,7 +37,7 @@ CREATE TABLE `conteudo_grupo` (
   CONSTRAINT `FK8nydd1vixh1mjxe3xg8gfsrnq` FOREIGN KEY (`id_utilizador`) REFERENCES `utilizador` (`id`),
   CONSTRAINT `FKa0copbitrhb2edwkhtmw9raln` FOREIGN KEY (`id_video`) REFERENCES `video` (`id`),
   CONSTRAINT `FKpp7qu9epeqpa33oyrlytxp25` FOREIGN KEY (`id_musica`) REFERENCES `musica` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `conteudo_grupo` (
 
 LOCK TABLES `conteudo_grupo` WRITE;
 /*!40000 ALTER TABLE `conteudo_grupo` DISABLE KEYS */;
-INSERT INTO `conteudo_grupo` VALUES (1,1,1,2,NULL),(2,1,2,2,NULL),(3,1,3,2,NULL),(4,1,4,2,NULL),(5,1,5,2,NULL),(6,1,6,2,NULL),(7,1,7,2,NULL),(8,1,8,2,NULL),(9,1,NULL,2,1);
+INSERT INTO `conteudo_grupo` VALUES (1,1,1,2,NULL),(2,1,2,2,NULL),(3,1,3,2,NULL),(4,1,4,2,NULL),(5,1,5,2,NULL),(6,1,6,2,NULL),(7,1,7,2,NULL),(8,1,8,2,NULL),(9,1,NULL,2,1),(23,1,28,4,NULL),(24,1,NULL,4,2),(25,1,NULL,1,5),(26,1,29,4,NULL),(28,1,32,4,NULL),(29,1,NULL,1,6),(30,6,34,5,NULL),(31,1,35,4,NULL);
 /*!40000 ALTER TABLE `conteudo_grupo` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:50
+-- Dump completed on 2025-07-14  5:25:01

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Artista } from '../models/Artista';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class ArtistaService {
 
   constructor() { }
 
-  private baseUrl = "http://localhost:8080/Artista";
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Artista`;
   private httpClient = inject(HttpClient);
 
   createArtista(artista: Artista) {

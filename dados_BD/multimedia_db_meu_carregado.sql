@@ -35,7 +35,7 @@ CREATE TABLE `meu_carregado` (
   CONSTRAINT `FKe5ohgmft8d6wma4j05nc53048` FOREIGN KEY (`id_video`) REFERENCES `video` (`id`),
   CONSTRAINT `FKon5l9srbk6echqa7by3fa452r` FOREIGN KEY (`id_musica`) REFERENCES `musica` (`id`),
   CONSTRAINT `FKrfyv5vx892qmwnrdmdbnun8d2` FOREIGN KEY (`id_utilizador`) REFERENCES `utilizador` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `meu_carregado` (
 
 LOCK TABLES `meu_carregado` WRITE;
 /*!40000 ALTER TABLE `meu_carregado` DISABLE KEYS */;
-INSERT INTO `meu_carregado` VALUES (1,_binary '',1,2,NULL),(2,_binary '',2,2,NULL),(3,_binary '',3,2,NULL),(4,_binary '',4,2,NULL),(5,_binary '',5,2,NULL),(6,_binary '',6,2,NULL),(7,_binary '',7,2,NULL),(8,_binary '',8,2,NULL),(9,_binary '',NULL,2,1),(10,_binary '\0',9,4,NULL);
+INSERT INTO `meu_carregado` VALUES (1,_binary '',1,2,NULL),(2,_binary '',2,2,NULL),(3,_binary '',3,2,NULL),(4,_binary '',4,2,NULL),(5,_binary '',5,2,NULL),(6,_binary '',6,2,NULL),(7,_binary '',7,2,NULL),(8,_binary '',8,2,NULL),(9,_binary '',NULL,2,1),(10,_binary '\0',9,4,NULL),(27,_binary '',28,4,NULL),(28,_binary '',NULL,4,2),(29,_binary '\0',NULL,1,3),(30,_binary '\0',NULL,4,4),(31,_binary '',NULL,1,5),(32,_binary '',29,4,NULL),(33,_binary '\0',30,2,NULL),(34,_binary '\0',33,5,NULL),(35,_binary '',35,4,NULL);
 /*!40000 ALTER TABLE `meu_carregado` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:49
+-- Dump completed on 2025-07-14  5:25:01

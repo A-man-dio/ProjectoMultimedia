@@ -14,10 +14,6 @@ public class MembroGrupoService {
     @Autowired
     private MembroGrupoRepository repository;
 
-    public MembroGrupo findByGrupoIdAndUtilizadorId(Integer idGrupo, Integer idUtilizador) {
-        return repository.findByGrupoIdAndUtilizadorId(idGrupo, idUtilizador);
-    }
-
     public MembroGrupo save(MembroGrupo membroGrupo) {
         return repository.save(membroGrupo);
     }

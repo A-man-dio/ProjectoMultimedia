@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.PrivilegioEditor;
 import ao.isptec.multimedia.repository.PrivilegioEditorRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,4 +38,10 @@ public class PrivilegioEditorService {
     public List<PrivilegioEditor> findByBeneficiarioId(Integer idBeneficiario) {
         return repository.findByBeneficiarioId(idBeneficiario);
     }
+
+    @Transactional
+    public void deleteByConcedenteIdAndBeneficiarioId(Integer concedenteId, Integer beneficiarioId) {
+        repository.deleteByConcedenteIdAndBeneficiarioId(concedenteId, beneficiarioId);
+    }
+
 }

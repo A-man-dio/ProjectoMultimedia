@@ -34,7 +34,7 @@ CREATE TABLE `utilizador` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UKeougu510uft70icifeafv6cll` (`email`),
   UNIQUE KEY `UK95oprqrxvxhsfbyuagaq71ipg` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `utilizador` (
 
 LOCK TABLES `utilizador` WRITE;
 /*!40000 ALTER TABLE `utilizador` DISABLE KEYS */;
-INSERT INTO `utilizador` VALUES (1,1,'2025-06-28 01:59:24.000000','marcelolisboa365@gmail.com','marcelo','$2a$10$iodiXcIj9VFRAqO/by84Wu.bsBEsrm2Zp2PSk3ioXH5XGHWsxxf46',1,'ma365'),(2,1,'2025-06-28 02:35:14.000000','pedro365@gmail.com','Pedro Admin','$2a$10$rWqGbbbGegflmNqIePtGouK5oeou.5OglcCboHCcLM.Q/arW1al1y',1,'pedro45'),(4,1,'2025-07-06 22:00:55.000000','Nunes23@gmail.com','Andreia Nunes','$2a$10$bMP7mBkO59df.7v1leIPXeEXx1ilUiWdvvLiFFAQf6NmzRAWVJcou',1,'nunes23');
+INSERT INTO `utilizador` VALUES (1,1,'2025-06-28 01:59:24.000000','marcelolisboa365@gmail.com','marcelo','$2a$10$iodiXcIj9VFRAqO/by84Wu.bsBEsrm2Zp2PSk3ioXH5XGHWsxxf46',1,'ma365'),(2,1,'2025-06-28 02:35:14.000000','pedro365@gmail.com','Pedro Admin','$2a$10$rWqGbbbGegflmNqIePtGouK5oeou.5OglcCboHCcLM.Q/arW1al1y',1,'pedro45'),(4,1,'2025-07-06 22:00:55.000000','Nunes23@gmail.com','Andreia Nunes','$2a$10$bMP7mBkO59df.7v1leIPXeEXx1ilUiWdvvLiFFAQf6NmzRAWVJcou',1,'nunes23'),(5,1,'2025-07-14 01:13:02.000000','ana34@gmail.com','Ana de Jesus','$2a$10$RZPL1Hgp2WqqpIyNr5tEV.8wMBkBuSgIq1PiduVbNjfOkhwTyxxoi',1,'ana34');
 /*!40000 ALTER TABLE `utilizador` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:49
+-- Dump completed on 2025-07-14  5:25:01

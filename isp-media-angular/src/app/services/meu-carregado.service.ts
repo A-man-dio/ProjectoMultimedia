@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { MeuCarregado } from '../models/MeuCarregado';
 import { HttpClient } from '@angular/common/http';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,9 @@ export class MeuCarregadoService {
 
   constructor() { }
 
-  private baseUrl = 'http://localhost:8080/MeuCarregado';
+
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/MeuCarregado`;
   private httpClient = inject(HttpClient);
 
   saveMeuCarregado(meuCarregado: MeuCarregado) {

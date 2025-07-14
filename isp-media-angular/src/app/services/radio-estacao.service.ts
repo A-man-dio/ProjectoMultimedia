@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { RadioEstacao } from '../models/RadioEstacao';
 import { Observable } from 'rxjs';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class RadioEstacaoService {
 
   constructor() { }
 
-  private readonly baseUrl = 'http://localhost:8080/RadioEstacao';
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/RadioEstacao`;
   private httpClient = inject(HttpClient);
 
   createRadioEstacao(radioEstacao: RadioEstacao) {

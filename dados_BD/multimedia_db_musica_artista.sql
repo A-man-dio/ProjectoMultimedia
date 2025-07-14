@@ -31,7 +31,7 @@ CREATE TABLE `musica_artista` (
   KEY `FK30b2fp8uqaa0hhp80rxdp9562` (`id_musica`),
   CONSTRAINT `FK30b2fp8uqaa0hhp80rxdp9562` FOREIGN KEY (`id_musica`) REFERENCES `musica` (`id`),
   CONSTRAINT `FKtppchdtjniwm9wyge08xc6nla` FOREIGN KEY (`id_artista`) REFERENCES `artista` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `musica_artista` (
 
 LOCK TABLES `musica_artista` WRITE;
 /*!40000 ALTER TABLE `musica_artista` DISABLE KEYS */;
-INSERT INTO `musica_artista` VALUES (1,4,7),(2,4,8),(3,3,8),(4,3,5),(5,3,6),(6,2,3),(7,2,4),(8,1,1),(9,1,2),(10,5,9);
+INSERT INTO `musica_artista` VALUES (1,4,7),(2,4,8),(3,3,8),(4,3,5),(5,3,6),(6,2,3),(7,2,4),(8,1,1),(9,1,2),(10,5,9),(30,7,28),(31,10,29),(32,7,30),(33,5,32),(34,11,33),(35,11,34),(36,11,35);
 /*!40000 ALTER TABLE `musica_artista` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:49
+-- Dump completed on 2025-07-14  5:25:01

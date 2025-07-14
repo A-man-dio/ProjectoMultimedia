@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AlbumArtista } from '../models/AlbumArtista';
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class AlbumArtistaService {
 
   constructor() { }
 
-  private baseUrl = 'http://localhost:8080/AlbumArtista';
+  private sharedDataService = inject(SharedDataService);
+  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/AlbumArtista`;
   private httpClient = inject(HttpClient);
 
   saveAlbumArtista(albumArtista: AlbumArtista) {

@@ -33,7 +33,7 @@ CREATE TABLE `membro_grupo` (
   KEY `FK2wbq8r5ivdadaqmttrx1nut89` (`id_utilizador`),
   CONSTRAINT `FK2wbq8r5ivdadaqmttrx1nut89` FOREIGN KEY (`id_utilizador`) REFERENCES `utilizador` (`id`),
   CONSTRAINT `FK8ncc37cpy0fe7l8ij5c2tt9rl` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `membro_grupo` (
 
 LOCK TABLES `membro_grupo` WRITE;
 /*!40000 ALTER TABLE `membro_grupo` DISABLE KEYS */;
-INSERT INTO `membro_grupo` VALUES (1,1,3,1,2),(2,1,1,1,1),(3,1,1,1,4);
+INSERT INTO `membro_grupo` VALUES (1,1,3,1,2),(2,1,1,1,1),(3,1,1,1,4),(4,1,3,4,4),(5,1,3,5,4),(34,1,1,1,5),(35,1,3,6,5),(37,1,1,5,5);
 /*!40000 ALTER TABLE `membro_grupo` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:50
+-- Dump completed on 2025-07-14  5:25:01

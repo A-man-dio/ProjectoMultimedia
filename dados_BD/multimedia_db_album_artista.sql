@@ -31,7 +31,7 @@ CREATE TABLE `album_artista` (
   KEY `FKdnxdsho1ugy2s983hfufdrnm1` (`id_artista`),
   CONSTRAINT `FKdnxdsho1ugy2s983hfufdrnm1` FOREIGN KEY (`id_artista`) REFERENCES `artista` (`id`),
   CONSTRAINT `FKk0407hea5n63ss2ni0qb3t1sv` FOREIGN KEY (`id_album`) REFERENCES `album` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `album_artista` (
 
 LOCK TABLES `album_artista` WRITE;
 /*!40000 ALTER TABLE `album_artista` DISABLE KEYS */;
-INSERT INTO `album_artista` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4);
+INSERT INTO `album_artista` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,7);
 /*!40000 ALTER TABLE `album_artista` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-07 21:09:49
+-- Dump completed on 2025-07-14  5:25:01
